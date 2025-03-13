@@ -1,4 +1,4 @@
-import HarContainer from "./components/har/har-container";
+import HarContainer from "@/components/har/har-container";
 
 export default function Home() {
   /*
