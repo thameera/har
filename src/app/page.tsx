@@ -1,3 +1,5 @@
+"use client";
+
 import HarContainer from "@/components/har/har-container";
 
 export default function Home() {
