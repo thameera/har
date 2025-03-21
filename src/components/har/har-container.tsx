@@ -1,5 +1,6 @@
 import { ModeToggle } from "../mode-toggle";
 import HarView from "./har-view";
+import { HarProvider } from "./har-provider";
 
 export default function HarContainer() {
   return (
@@ -9,7 +10,9 @@ export default function HarContainer() {
         <ModeToggle />
       </div>
       <div className="flex-1">
-        <HarView />
+        <HarProvider>
+          <HarView />
+        </HarProvider>
       </div>
     </div>
   );
