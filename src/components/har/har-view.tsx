@@ -1,34 +1,19 @@
 import { useState } from "react";
 import { FileUploader } from "./file-uploader";
 import { Button } from "@/components/ui/button";
+import { useHar } from "./har-provider";
 
 export default function HarView() {
-  const [har, setHar] = useState<any | null>(null);
   const [minimized, setMinimized] = useState(false);
-
-  const handleParse = (data: any) => {
-    setHar(data);
-  };
-
-  const handleError = (error: string) => {
-    console.error(error);
-  };
-
-  const handleStart = () => {
-    // Maybe show a loading indicator?
-  };
+  const { harData } = useHar();
 
   return (
     <div className="flex flex-col h-full">
       <h2 className="p-4">HAR View</h2>
       <div className="flex-1 h-full">
-        {!har ? (
+        {!harData ? (
           <div className="h-full">
-            <FileUploader
-              onParse={handleParse}
-              onError={handleError}
-              onStart={handleStart}
-            />
+            <FileUploader />
           </div>
         ) : (
           <div className="h-full">

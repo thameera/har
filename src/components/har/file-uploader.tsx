@@ -1,14 +1,10 @@
 import { useCallback, useEffect, useRef } from "react";
 import { useDropzone } from "react-dropzone";
+import { useHar } from "./har-provider";
 
-interface FileUploaderProps {
-  onParse: (data: any) => void;
-  onError: (error: string) => void;
-  onStart: () => void;
-}
-
-export function FileUploader({ onParse, onError, onStart }: FileUploaderProps) {
+export function FileUploader() {
   const workerRef = useRef<Worker | null>(null);
+  const { setHarFile, setHarLoadError, setIsHarFileLoading } = useHar();
 
   useEffect(() => {
     const workerCode = `
@@ -33,17 +29,16 @@ export function FileUploader({ onParse, onError, onStart }: FileUploaderProps) {
       const { success, data, error } = event.data;
       if (success) {
         console.log("Successfully parsed HAR file");
-        // We send this as an array, expecting multiple HAR files in the future
-        onParse([data]);
+        setHarFile([data]);
       } else {
         console.log(error);
-        onError(error);
+        setHarLoadError(error);
       }
     };
 
     worker.onerror = (error) => {
       console.error(error);
-      onError("Error processing file");
+      setHarLoadError("Error processing file");
     };
 
     return () => {
@@ -56,7 +51,7 @@ export function FileUploader({ onParse, onError, onStart }: FileUploaderProps) {
       return;
     }
 
-    onStart();
+    setIsHarFileLoading(true);
     const file = acceptedFiles[0];
 
     const reader = new FileReader();
@@ -68,7 +63,7 @@ export function FileUploader({ onParse, onError, onStart }: FileUploaderProps) {
     };
 
     reader.onerror = () => {
-      onError("Error reading file");
+      setHarLoadError("Error reading file");
     };
 
     reader.readAsText(file);
