@@ -4,8 +4,9 @@ import { useHar } from "./har-provider";
 
 export function FileUploader() {
   const workerRef = useRef<Worker | null>(null);
-  const { setHarFile, setIsHarFileLoading } = useHar();
+  const { setHarFile } = useHar();
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const workerCode = `
@@ -28,7 +29,7 @@ export function FileUploader() {
 
     worker.onmessage = (event) => {
       const { success, data, error } = event.data;
-      setIsHarFileLoading(false);
+      setIsLoading(false);
       if (success) {
         console.log("Successfully parsed HAR file");
         setHarFile([data]);
@@ -41,7 +42,7 @@ export function FileUploader() {
 
     worker.onerror = (error) => {
       console.error(error);
-      setIsHarFileLoading(false);
+      setIsLoading(false);
       setError("Error processing file");
     };
 
@@ -55,7 +56,7 @@ export function FileUploader() {
       return;
     }
 
-    setIsHarFileLoading(true);
+    setIsLoading(true);
     setError(null);
     const file = acceptedFiles[0];
 
@@ -68,7 +69,7 @@ export function FileUploader() {
     };
 
     reader.onerror = () => {
-      setIsHarFileLoading(false);
+      setIsLoading(false);
       setError("Error reading file");
     };
 
@@ -81,6 +82,7 @@ export function FileUploader() {
       "application/json": [".har"],
     },
     multiple: false,
+    disabled: isLoading,
   });
 
   return (
@@ -93,12 +95,14 @@ export function FileUploader() {
       )}
       <div
         {...getRootProps()}
-        className={`border-dashed border-2 border-border bg-muted/50 rounded-lg p-6 text-center cursor-pointer transition-colors duration-200 ${
+        className={`border-dashed border-2 border-border bg-muted/50 rounded-lg p-6 text-center transition-colors duration-200 ${
           isDragActive ? "bg-muted" : ""
-        }`}
+        } ${isLoading ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
       >
         <input {...getInputProps()} />
-        {isDragActive ? (
+        {isLoading ? (
+          <p className="text-muted-foreground">Parsing the HAR file...</p>
+        ) : isDragActive ? (
           <p className="text-muted-foreground">Drop the file here ...</p>
         ) : (
           <p className="text-muted-foreground">
