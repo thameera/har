@@ -3,8 +3,6 @@ import { createContext, useContext, useState } from "react";
 interface HarContextType {
   harData: any[] | null;
   setHarFile: (data: any[]) => void;
-  harLoadError: string | null;
-  setHarLoadError: (error: string | null) => void;
   isHarFileLoading: boolean;
   setIsHarFileLoading: (loading: boolean) => void;
 }
@@ -13,7 +11,6 @@ const HarContext = createContext<HarContextType | undefined>(undefined);
 
 export function HarProvider({ children }: { children: React.ReactNode }) {
   const [harData, setHarFile] = useState<any[] | null>(null);
-  const [harLoadError, setHarLoadError] = useState<string | null>(null);
   const [isHarFileLoading, setIsHarFileLoading] = useState(false);
 
   return (
@@ -21,8 +18,6 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
       value={{
         harData,
         setHarFile,
-        harLoadError,
-        setHarLoadError,
         isHarFileLoading,
         setIsHarFileLoading,
       }}
