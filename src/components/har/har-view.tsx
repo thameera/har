@@ -1,8 +1,8 @@
-import { useState } from "react";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
 import { FileUploader } from "./file-uploader";
 import { useHar } from "./har-provider";
+import { RequestsList } from "./RequestsList";
 
 export default function HarView() {
   const { harData } = useHar();
@@ -22,7 +22,7 @@ export default function HarView() {
               maxSize={50}
               className="bg-muted/50 p-4"
             >
-              Sidebar panel
+              <RequestsList />
             </Panel>
             <PanelResizeHandle className="w-1 bg-border" />
             <Panel
