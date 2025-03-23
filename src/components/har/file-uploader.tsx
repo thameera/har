@@ -15,6 +15,9 @@ export function FileUploader() {
 
         try {
           const harData = JSON.parse(fileContent);
+          if (!harData?.log?.entries?.length) {
+            throw new Error("No requests found in HAR file");
+          }
           self.postMessage({ success: true, data: harData });
         } catch (error) {
           self.postMessage({ success: false, error: error.message });
@@ -89,7 +92,7 @@ export function FileUploader() {
     <>
       {error && (
         <div className="mb-4 p-4 text-sm text-red-500 bg-red-50 rounded-lg">
-          <p>There was an error parsing the HAR file</p>
+          <p>There was an error parsing the HAR file:</p>
           <p className="mt-1">{error}</p>
         </div>
       )}
