@@ -1,17 +1,12 @@
 import { createContext, useContext, useState } from "react";
-
-interface HarContextType {
-  harData: any[] | null;
-  setHarFile: (data: any[]) => void;
-  getAllRequests: () => any[];
-}
+import { HarContextType, HarData, HarRequest } from "./harTypes";
 
 const HarContext = createContext<HarContextType | undefined>(undefined);
 
 export function HarProvider({ children }: { children: React.ReactNode }) {
-  const [harData, setHarFile] = useState<any[] | null>(null);
+  const [harData, setHarFile] = useState<HarData | null>(null);
 
-  const getAllRequests = () => {
+  const getAllRequests = (): HarRequest[] => {
     if (!harData?.log?.entries) {
       return [];
     }
