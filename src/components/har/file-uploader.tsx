@@ -35,7 +35,7 @@ export function FileUploader() {
       setIsLoading(false);
       if (success) {
         console.log("Successfully parsed HAR file");
-        setHarFile([data]);
+        setHarFile(data);
         setError(null);
       } else {
         console.log(error);
