@@ -1,7 +1,7 @@
 import { useHar } from "./har-provider";
 
 export const RequestsList = () => {
-  const { getAllRequests } = useHar();
+  const { getAllRequests, selectedRequest, selectRequest } = useHar();
   const requests = getAllRequests();
 
   if (requests.length === 0) {
@@ -19,7 +19,14 @@ export const RequestsList = () => {
           {requests.map((request, index) => (
             <div
               key={index}
-              className="flex items-center gap-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer rounded"
+              onClick={() =>
+                selectRequest(selectedRequest === request ? null : request)
+              }
+              className={`flex items-center gap-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer rounded transition-colors duration-150 ${
+                selectedRequest === request
+                  ? "bg-blue-100 dark:bg-blue-900/30"
+                  : ""
+              }`}
             >
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">

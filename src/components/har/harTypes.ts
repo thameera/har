@@ -50,4 +50,6 @@ export interface HarContextType {
   harData: HarData | null;
   setHarFile: (data: HarData) => void;
   getAllRequests: () => HarRequest[];
+  selectedRequest: HarRequest | null;
+  selectRequest: (request: HarRequest | null) => void;
 }
