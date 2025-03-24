@@ -27,7 +27,26 @@ export const RequestsList = () => {
                     {request.request.method}
                   </span>
                   <span className="text-sm truncate text-gray-900 dark:text-gray-100">
-                    {request.request.url}
+                    {(() => {
+                      try {
+                        const url = new URL(request.request.url);
+                        return (
+                          <>
+                            <span className="text-gray-600 dark:text-gray-400">
+                              {url.protocol}//
+                            </span>
+                            <span className="font-medium text-blue-500 dark:text-blue-200">
+                              {url.hostname}
+                            </span>
+                            <span className="text-gray-600 dark:text-gray-400">
+                              {url.pathname + url.search}
+                            </span>
+                          </>
+                        );
+                      } catch {
+                        return request.request.url;
+                      }
+                    })()}
                   </span>
                 </div>
                 <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
