@@ -3,6 +3,7 @@ import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { FileUploader } from "./file-uploader";
 import { useHar } from "./har-provider";
 import { RequestsList } from "./RequestsList";
+import { DetailsPane } from "./DetailsPane";
 
 export default function HarView() {
   const { harData } = useHar();
@@ -31,7 +32,7 @@ export default function HarView() {
               maxSize={50}
               className="bg-muted/50 p-4"
             >
-              Main panel
+              <DetailsPane />
             </Panel>
             <PanelResizeHandle className="w-1 bg-border" />
             <Panel
