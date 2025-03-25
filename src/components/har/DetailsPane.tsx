@@ -1,4 +1,5 @@
 import { useHar } from "./har-provider";
+import { RequestDetails } from "./RequestDetails";
 
 export function DetailsPane() {
   const { selectedRequest } = useHar();
@@ -6,10 +7,7 @@ export function DetailsPane() {
   return (
     <div>
       {selectedRequest ? (
-        <div>
-          {/* Request details will go here */}
-          <pre>{JSON.stringify(selectedRequest, null, 2)}</pre>
-        </div>
+        <RequestDetails request={selectedRequest} />
       ) : (
         <div className="flex h-full items-center justify-center text-muted-foreground">
           Select a request to view details
