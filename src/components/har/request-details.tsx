@@ -26,7 +26,7 @@ export function RequestDetails({ request }: RequestDetailsProps) {
           </TabsList>
 
           <TabsContent value="request" className="mt-4">
-            <RequestTab />
+            <RequestTab request={request} />
           </TabsContent>
 
           <TabsContent value="response" className="mt-4">
