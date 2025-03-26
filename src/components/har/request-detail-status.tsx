@@ -5,6 +5,10 @@ interface RequestDetailStatusProps {
 }
 
 function getStatusInfo(status: number): { emoji: string; text: string } {
+  if (status === 0) {
+    return { emoji: "🔴", text: "" };
+  }
+
   const text = getReasonPhrase(status) || "Unknown";
 
   if (status >= 200 && status < 300) {
