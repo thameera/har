@@ -2,8 +2,8 @@ import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
 import { FileUploader } from "./file-uploader";
 import { useHar } from "./har-provider";
-import { RequestsList } from "./RequestsList";
-import { DetailsPane } from "./DetailsPane";
+import { RequestsList } from "./requests-list";
+import { DetailsPane } from "./details-pane";
 
 export default function HarView() {
   const { harData } = useHar();

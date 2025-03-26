@@ -1,5 +1,5 @@
 import { HarRequest } from "./harTypes";
-import { FancyURL } from "./FancyURL";
+import { RequestDetailURL } from "./request-detail-url";
 import { RequestDetailStatus } from "./request-detail-status";
 
 interface RequestDetailsProps {
@@ -12,7 +12,7 @@ export function RequestDetails({ request }: RequestDetailsProps) {
 
   return (
     <div className="p-4 space-y-2">
-      <FancyURL method={method} url={url} />
+      <RequestDetailURL method={method} url={url} />
       <RequestDetailStatus status={status} />
     </div>
   );

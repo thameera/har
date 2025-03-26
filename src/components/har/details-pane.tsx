@@ -1,5 +1,5 @@
 import { useHar } from "./har-provider";
-import { RequestDetails } from "./RequestDetails";
+import { RequestDetails } from "./request-details";
 
 export function DetailsPane() {
   const { selectedRequest } = useHar();

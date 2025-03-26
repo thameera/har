@@ -1,9 +1,9 @@
-interface FancyURLProps {
+interface RequestDetailURLProps {
   method: string;
   url: string;
 }
 
-export function FancyURL({ method, url }: FancyURLProps) {
+export function RequestDetailURL({ method, url }: RequestDetailURLProps) {
   try {
     const urlObj = new URL(url);
     const searchParams = new URLSearchParams(urlObj.search);
