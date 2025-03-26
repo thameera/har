@@ -2,6 +2,7 @@ import { HarRequest } from "./harTypes";
 import { RequestDetailURL } from "./request-detail-url";
 import { RequestDetailStatus } from "./request-detail-status";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { RequestTab } from "./request-tab";
 
 interface RequestDetailsProps {
   request: HarRequest;
@@ -25,7 +26,7 @@ export function RequestDetails({ request }: RequestDetailsProps) {
           </TabsList>
 
           <TabsContent value="request" className="mt-4">
-            <div className="text-muted-foreground">Request details</div>
+            <RequestTab />
           </TabsContent>
 
           <TabsContent value="response" className="mt-4">
