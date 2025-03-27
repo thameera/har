@@ -44,6 +44,7 @@ export const RequestsList = () => {
                             </span>
                             <span className="font-medium text-blue-500 dark:text-blue-200">
                               {url.hostname}
+                              {url.port ? `:${url.port}` : ""}
                             </span>
                             <span className="text-gray-600 dark:text-gray-400">
                               {url.pathname + url.search}
