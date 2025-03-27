@@ -30,6 +30,12 @@ export function RequestTab({ request }: RequestTabProps) {
               <h4 className="text-sm font-medium">Domain:</h4>
               <div className="font-mono text-sm">{url.hostname}</div>
             </div>
+            {url.port && url.port !== "443" && (
+              <div className="flex items-center gap-2">
+                <h4 className="text-sm font-medium">Port:</h4>
+                <div className="font-mono text-sm">{url.port}</div>
+              </div>
+            )}
             <div className="flex items-center gap-2">
               <h4 className="text-sm font-medium">Path:</h4>
               <div className="font-mono text-sm">{url.pathname}</div>
