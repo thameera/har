@@ -27,17 +27,23 @@ export function RequestTab({ request }: RequestTabProps) {
         <AccordionContent>
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <h4 className="text-sm font-medium">Domain:</h4>
+              <h4 className="text-sm text-emerald-600 dark:text-emerald-500">
+                Domain
+              </h4>
               <div className="font-mono text-sm">{url.hostname}</div>
             </div>
             {url.port && url.port !== "443" && (
               <div className="flex items-center gap-2">
-                <h4 className="text-sm font-medium">Port:</h4>
+                <h4 className="text-sm text-emerald-600 dark:text-emerald-500">
+                  Port
+                </h4>
                 <div className="font-mono text-sm">{url.port}</div>
               </div>
             )}
             <div className="flex items-center gap-2">
-              <h4 className="text-sm font-medium">Path:</h4>
+              <h4 className="text-sm text-emerald-600 dark:text-emerald-500">
+                Path
+              </h4>
               <div className="font-mono text-sm">{url.pathname}</div>
             </div>
             {searchParams.toString() && (
@@ -46,14 +52,10 @@ export function RequestTab({ request }: RequestTabProps) {
                 <div className="space-y-1">
                   {Array.from(searchParams.entries()).map(([key, value]) => (
                     <div key={key} className="font-mono text-sm">
-                      <span className="text-purple-500 dark:text-purple-400">
+                      <span className="text-emerald-600 dark:text-emerald-500">
                         {key}
                       </span>
-                      <span className="text-gray-600 dark:text-gray-400">
-                        {" "}
-                        ={" "}
-                      </span>
-                      <span className="text-gray-900 dark:text-gray-100">
+                      <span className="text-gray-600 dark:text-gray-400 ml-2">
                         {value}
                       </span>
                     </div>
@@ -67,14 +69,10 @@ export function RequestTab({ request }: RequestTabProps) {
                 <div className="space-y-1">
                   {Array.from(hashParams.entries()).map(([key, value]) => (
                     <div key={key} className="font-mono text-sm">
-                      <span className="text-purple-500 dark:text-purple-400">
+                      <span className="text-emerald-600 dark:text-emerald-500">
                         {key}
                       </span>
-                      <span className="text-gray-600 dark:text-gray-400">
-                        {" "}
-                        ={" "}
-                      </span>
-                      <span className="text-gray-900 dark:text-gray-100">
+                      <span className="text-gray-600 dark:text-gray-400 ml-2">
                         {value}
                       </span>
                     </div>
@@ -88,7 +86,25 @@ export function RequestTab({ request }: RequestTabProps) {
 
       <AccordionItem value="headers">
         <AccordionTrigger>Request Headers</AccordionTrigger>
-        <AccordionContent>Request headers details</AccordionContent>
+        <AccordionContent>
+          <div className="space-y-1">
+            {request.request.headers.map((header) => (
+              <div key={header.name} className="font-mono text-sm">
+                <span className="text-emerald-600 dark:text-emerald-500">
+                  {header.name}
+                </span>
+                <span className="text-gray-600 dark:text-gray-400 ml-2">
+                  {header.value}
+                </span>
+              </div>
+            ))}
+            {request.request.headers.length === 0 && (
+              <div className="text-sm text-gray-600 dark:text-gray-400">
+                No headers found
+              </div>
+            )}
+          </div>
+        </AccordionContent>
       </AccordionItem>
 
       <AccordionItem value="other">
