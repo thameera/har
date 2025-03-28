@@ -104,8 +104,11 @@ export function ResponseTab({ request }: ResponseTabProps) {
         <AccordionTrigger>Response Headers</AccordionTrigger>
         <AccordionContent>
           <div className="space-y-1">
-            {response.headers.map((header) => (
-              <div key={header.name} className="font-mono text-sm">
+            {response.headers.map((header, index) => (
+              <div
+                key={`${header.name}-${index}`}
+                className="font-mono text-sm"
+              >
                 <span className="text-emerald-600 dark:text-emerald-500">
                   {header.name}
                 </span>
