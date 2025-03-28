@@ -34,6 +34,25 @@ export function ResponseTab({ request }: ResponseTabProps) {
     );
   };
 
+  // Prettify JSON content
+  const getPrettifiedContent = (content: {
+    mimeType: string;
+    text?: string;
+  }) => {
+    if (!content.text) return "";
+
+    if (content.mimeType.toLowerCase().includes("json")) {
+      try {
+        return JSON.stringify(JSON.parse(content.text), null, 2);
+      } catch (error) {
+        return `// Invalid JSON format\n${content.text}`;
+      }
+    }
+
+    // Return original content for non-JSON types
+    return content.text;
+  };
+
   return (
     <Accordion
       type="multiple"
@@ -67,7 +86,7 @@ export function ResponseTab({ request }: ResponseTabProps) {
               </h4>
               {canDisplayAsText(response.content) ? (
                 <pre className="font-mono text-sm p-2 bg-gray-50 dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-800 overflow-x-auto whitespace-pre-wrap break-words max-h-96 overflow-y-auto">
-                  {response.content.text}
+                  {getPrettifiedContent(response.content)}
                 </pre>
               ) : (
                 <div className="text-sm text-gray-600 dark:text-gray-400 italic">
