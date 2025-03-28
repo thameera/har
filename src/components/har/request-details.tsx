@@ -3,6 +3,7 @@ import { RequestDetailURL } from "./request-detail-url";
 import { RequestDetailStatus } from "./request-detail-status";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { RequestTab } from "./request-tab";
+import { ResponseTab } from "./response-tab";
 
 interface RequestDetailsProps {
   request: HarRequest;
@@ -30,7 +31,7 @@ export function RequestDetails({ request }: RequestDetailsProps) {
           </TabsContent>
 
           <TabsContent value="response" className="mt-4">
-            <div className="text-muted-foreground">Response details</div>
+            <ResponseTab request={request} />
           </TabsContent>
 
           <TabsContent value="cookies" className="mt-4">
