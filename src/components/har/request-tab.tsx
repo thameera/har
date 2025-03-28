@@ -20,7 +20,7 @@ export function RequestTab({ request }: RequestTabProps) {
     <Accordion
       type="multiple"
       className="w-full"
-      defaultValue={["url", "headers", "other"]}
+      defaultValue={["url", "headers"]}
     >
       <AccordionItem value="url">
         <AccordionTrigger>URL</AccordionTrigger>
@@ -105,11 +105,6 @@ export function RequestTab({ request }: RequestTabProps) {
             )}
           </div>
         </AccordionContent>
-      </AccordionItem>
-
-      <AccordionItem value="other">
-        <AccordionTrigger>Other</AccordionTrigger>
-        <AccordionContent>Other request details</AccordionContent>
       </AccordionItem>
     </Accordion>
   );
