@@ -17,13 +17,13 @@ export default function HarView() {
   }, [isPinnedPanelExpanded]);
 
   return (
-    <div>
+    <div className="h-full">
       {!harData ? (
-        <div>
+        <div className="h-full">
           <FileUploader />
         </div>
       ) : (
-        <div className="h-[calc(100vh-12rem)]">
+        <div className="h-full">
           {/* Using key to force complete re-render */}
           <PanelGroup
             key={`panel-group-${isPinnedPanelExpanded ? "expanded" : "collapsed"}`}
