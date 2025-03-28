@@ -32,8 +32,9 @@ export function RequestDetailURL({ method, url }: RequestDetailURLProps) {
                 <span className="text-purple-500 dark:text-purple-400">
                   {key}
                 </span>
-                <span className="text-gray-600 dark:text-gray-400">
-                  ={value}
+                <span className="text-gray-600 dark:text-gray-400">=</span>
+                <span className="text-gray-900 dark:text-gray-100 font-medium">
+                  {value}
                 </span>
               </span>
             ))}
@@ -48,8 +49,9 @@ export function RequestDetailURL({ method, url }: RequestDetailURLProps) {
                 <span className="text-purple-500 dark:text-purple-400">
                   {key}
                 </span>
-                <span className="text-gray-600 dark:text-gray-400">
-                  ={value}
+                <span className="text-gray-600 dark:text-gray-400">=</span>
+                <span className="text-gray-900 dark:text-gray-100 font-medium">
+                  {value}
                 </span>
               </span>
             ))}
