@@ -13,6 +13,27 @@ interface ResponseTabProps {
 export function ResponseTab({ request }: ResponseTabProps) {
   const { response } = request;
 
+  // Determine if content can be displayed as text
+  const canDisplayAsText = (content: { mimeType: string; text?: string }) => {
+    if (!content.text) return false;
+
+    const textBasedTypes = [
+      "text/",
+      "application/json",
+      "application/xml",
+      "application/javascript",
+      "application/x-javascript",
+      "application/ecmascript",
+      "application/x-ecmascript",
+      "application/ld+json",
+      "application/html",
+    ];
+
+    return textBasedTypes.some((type) =>
+      content.mimeType.toLowerCase().includes(type),
+    );
+  };
+
   return (
     <Accordion
       type="multiple"
@@ -38,6 +59,23 @@ export function ResponseTab({ request }: ResponseTabProps) {
               <div className="font-mono text-sm">
                 {response.content.size} bytes
               </div>
+            </div>
+
+            <div className="mt-4">
+              <h4 className="text-sm text-emerald-600 dark:text-emerald-500 mb-2">
+                Content
+              </h4>
+              {canDisplayAsText(response.content) ? (
+                <pre className="font-mono text-sm p-2 bg-gray-50 dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-800 overflow-x-auto whitespace-pre-wrap break-words max-h-96 overflow-y-auto">
+                  {response.content.text}
+                </pre>
+              ) : (
+                <div className="text-sm text-gray-600 dark:text-gray-400 italic">
+                  {response.content.text
+                    ? "Content cannot be displayed (binary or unsupported format)"
+                    : "No content available"}
+                </div>
+              )}
             </div>
           </div>
         </AccordionContent>
