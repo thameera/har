@@ -6,6 +6,7 @@ import { FileUploader } from "./file-uploader";
 import { useHar } from "./har-provider";
 import { RequestsList } from "./requests-list";
 import { DetailsPane } from "./details-pane";
+import { PinnedPane } from "./pinned-pane";
 
 export default function HarView() {
   const { harData } = useHar();
@@ -73,7 +74,7 @@ export default function HarView() {
                 <div
                   className={`${isPinnedPanelExpanded ? "opacity-100" : "opacity-0"} transition-opacity duration-300 ml-4`}
                 >
-                  Pinned Requests
+                  <PinnedPane />
                 </div>
               </div>
             </Panel>
