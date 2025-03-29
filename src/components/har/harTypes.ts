@@ -16,6 +16,7 @@ export interface HarRequest {
     statusText: string;
     httpVersion: string;
     headers: Array<{ name: string; value: string }>;
+    cookies: Array<{ name: string; value: string }>;
     content: {
       size: number;
       mimeType: string;
