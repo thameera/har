@@ -79,14 +79,14 @@ export const RequestsList = () => {
                   e.stopPropagation();
                   togglePinRequest(request);
                 }}
-                className={`p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors ${
+                className={`p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors icon-button ${
                   isPinned(request)
                     ? "text-blue-500 dark:text-blue-400"
                     : "text-gray-400 dark:text-gray-500"
                 }`}
                 title={isPinned(request) ? "Unpin request" : "Pin request"}
               >
-                <PinIcon className="h-4 w-4" />
+                <PinIcon className="h-4 w-4 icon-button" />
               </button>
             </div>
           ))}

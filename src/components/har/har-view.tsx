@@ -62,13 +62,14 @@ export default function HarView() {
               <div className="relative h-full">
                 <button
                   onClick={handlePanelToggle}
-                  className="absolute -left-4 top-1/2 -translate-y-1/2 bg-muted hover:bg-muted/80 py-2 px-2 rounded-r-lg border border-l-0 border-border transition-colors z-10 shadow-sm flex flex-col items-center gap-2 h-auto"
+                  className="absolute -left-3 top-1/2 -translate-y-1/2 bg-muted hover:bg-muted/80 py-1 px-1 rounded-r-md border border-l-0 border-border transition-colors z-10 shadow-sm flex flex-col items-center gap-1"
+                  style={{ width: "16px", padding: "3px 0" }}
                 >
-                  <PinIcon className="h-4 w-4" />
+                  <PinIcon className="h-3.5 w-3.5" />
                   {isPinnedPanelExpanded ? (
-                    <ChevronRight className="h-4 w-4" />
+                    <ChevronRight className="h-3.5 w-3.5" />
                   ) : (
-                    <ChevronLeft className="h-4 w-4" />
+                    <ChevronLeft className="h-3.5 w-3.5" />
                   )}
                 </button>
                 <div

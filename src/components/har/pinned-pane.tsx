@@ -62,10 +62,10 @@ export function PinnedPane() {
                 </div>
                 <button
                   onClick={() => togglePinRequest(request)}
-                  className="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600"
+                  className="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 icon-button"
                   title="Unpin request"
                 >
-                  <X className="h-4 w-4" />
+                  <X className="h-4 w-4 icon-button" />
                 </button>
               </div>
               <div className="flex-1 overflow-auto border-t">

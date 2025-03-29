@@ -160,9 +160,30 @@
   font-size: 10px !important;
 }
 
-/* Ensure button and icon sizing remains usable */
-.har-view-small-font button,
-.har-view-small-font svg {
+/* Ensure regular buttons have reasonable size */
+.har-view-small-font button {
   min-height: 24px;
   min-width: 24px;
+}
+
+/* Icon buttons should be smaller */
+.har-view-small-font .icon-button,
+.har-view-small-font button.icon-button {
+  min-height: 18px !important;
+  min-width: 18px !important;
+  height: auto !important;
+  width: auto !important;
+  padding: 2px !important;
+}
+
+/* Special case for panel toggle button that needs specific styling */
+.har-view-small-font button.icon-button.absolute {
+  padding: 4px !important;
+  gap: 2px !important;
+}
+
+.har-view-small-font .icon-button svg,
+.har-view-small-font button.icon-button svg {
+  height: 14px !important;
+  width: 14px !important;
 }
