@@ -20,6 +20,26 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
     setSelectedRequest(request);
   };
 
+  const togglePinRequest = (request: HarRequest) => {
+    if (!request._custom) {
+      request._custom = {};
+    }
+    request._custom.pinned = !request._custom.pinned;
+    // Force re-render by creating a new state object
+    setHarFile({ ...harData! });
+  };
+
+  const isPinned = (request: HarRequest): boolean => {
+    return !!request._custom?.pinned;
+  };
+
+  const getPinnedRequests = (): HarRequest[] => {
+    if (!harData?.log?.entries) {
+      return [];
+    }
+    return harData.log.entries.filter((req) => req._custom?.pinned === true);
+  };
+
   return (
     <HarContext.Provider
       value={{
@@ -28,6 +48,9 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
         getAllRequests,
         selectedRequest,
         selectRequest,
+        togglePinRequest,
+        isPinned,
+        getPinnedRequests,
       }}
     >
       {children}

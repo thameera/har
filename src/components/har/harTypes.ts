@@ -32,6 +32,9 @@ export interface HarRequest {
     wait: number;
     receive: number;
   };
+  _custom?: {
+    pinned?: boolean;
+  };
 }
 
 export interface HarLog {
@@ -53,4 +56,7 @@ export interface HarContextType {
   getAllRequests: () => HarRequest[];
   selectedRequest: HarRequest | null;
   selectRequest: (request: HarRequest | null) => void;
+  togglePinRequest: (request: HarRequest) => void;
+  isPinned: (request: HarRequest) => boolean;
+  getPinnedRequests: () => HarRequest[];
 }

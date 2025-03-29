@@ -1,7 +1,14 @@
 import { useHar } from "./har-provider";
+import { PinIcon } from "lucide-react";
 
 export const RequestsList = () => {
-  const { getAllRequests, selectedRequest, selectRequest } = useHar();
+  const {
+    getAllRequests,
+    selectedRequest,
+    selectRequest,
+    togglePinRequest,
+    isPinned,
+  } = useHar();
   const requests = getAllRequests();
 
   if (requests.length === 0) {
@@ -19,16 +26,18 @@ export const RequestsList = () => {
           {requests.map((request, index) => (
             <div
               key={index}
-              onClick={() =>
-                selectRequest(selectedRequest === request ? null : request)
-              }
               className={`flex items-center gap-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer rounded transition-colors duration-150 ${
                 selectedRequest === request
                   ? "bg-blue-100 dark:bg-blue-900/30"
                   : ""
               }`}
             >
-              <div className="flex-1 min-w-0">
+              <div
+                className="flex-1 min-w-0"
+                onClick={() =>
+                  selectRequest(selectedRequest === request ? null : request)
+                }
+              >
                 <div className="flex items-center gap-2 mb-2">
                   <span className="px-2 py-0.5 text-xs rounded bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100">
                     {request.request.method}
@@ -65,6 +74,20 @@ export const RequestsList = () => {
                   <span>{formatTime(request.time)}ms</span>
                 </div>
               </div>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  togglePinRequest(request);
+                }}
+                className={`p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors ${
+                  isPinned(request)
+                    ? "text-blue-500 dark:text-blue-400"
+                    : "text-gray-400 dark:text-gray-500"
+                }`}
+                title={isPinned(request) ? "Unpin request" : "Pin request"}
+              >
+                <PinIcon className="h-4 w-4" />
+              </button>
             </div>
           ))}
         </div>
