@@ -18,7 +18,7 @@ export default function HarView() {
   }, [isPinnedPanelExpanded]);
 
   return (
-    <div className="h-full">
+    <div className="h-full har-view-small-font">
       {!harData ? (
         <div className="h-full">
           <FileUploader />

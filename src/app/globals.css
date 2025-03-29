@@ -121,3 +121,48 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Base settings */
+.har-view-small-font {
+  font-size: 12px;
+}
+
+/* MOST IMPORTANT: Directly target our new class with highest specificity */
+.har-view-small-font .har-accordion-trigger {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+
+/* Multiple Radix selectors as backup */
+.har-view-small-font [data-radix-collection-item] > button,
+.har-view-small-font [data-slot="accordion-trigger"],
+.har-view-small-font [data-radix-accordion-trigger],
+.har-view-small-font [id^="radix-"][data-state] {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+
+/* Headings */
+.har-view-small-font h1,
+.har-view-small-font h2,
+.har-view-small-font h3,
+.har-view-small-font h4 {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+
+/* Target standard text */
+.har-view-small-font .text-sm {
+  font-size: 12px !important;
+}
+
+.har-view-small-font .text-xs {
+  font-size: 10px !important;
+}
+
+/* Ensure button and icon sizing remains usable */
+.har-view-small-font button,
+.har-view-small-font svg {
+  min-height: 24px;
+  min-width: 24px;
+}
