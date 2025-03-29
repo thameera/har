@@ -63,19 +63,19 @@ export function ResponseTab({ request }: ResponseTabProps) {
         <AccordionTrigger>Response Content</AccordionTrigger>
         <AccordionContent>
           <div className="space-y-1">
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-start gap-2">
               <h4 className="text-sm text-emerald-600 dark:text-emerald-500">
                 MIME Type
               </h4>
-              <div className="font-mono text-sm">
+              <div className="font-mono text-sm break-all">
                 {response.content.mimeType}
               </div>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-start gap-2">
               <h4 className="text-sm text-emerald-600 dark:text-emerald-500">
                 Size
               </h4>
-              <div className="font-mono text-sm">
+              <div className="font-mono text-sm break-all">
                 {response.content.size} bytes
               </div>
             </div>
@@ -89,7 +89,7 @@ export function ResponseTab({ request }: ResponseTabProps) {
                   {getPrettifiedContent(response.content)}
                 </pre>
               ) : (
-                <div className="text-sm text-gray-600 dark:text-gray-400 italic">
+                <div className="text-sm text-gray-600 dark:text-gray-400 italic break-words">
                   {response.content.text
                     ? "Content cannot be displayed (binary or unsupported format)"
                     : "No content available"}
@@ -109,10 +109,10 @@ export function ResponseTab({ request }: ResponseTabProps) {
                 key={`${header.name}-${index}`}
                 className="font-mono text-sm"
               >
-                <span className="text-emerald-600 dark:text-emerald-500">
+                <span className="text-emerald-600 dark:text-emerald-500 break-all">
                   {header.name}
                 </span>
-                <span className="text-gray-600 dark:text-gray-400 ml-2">
+                <span className="text-gray-600 dark:text-gray-400 ml-2 break-all">
                   {header.value}
                 </span>
               </div>

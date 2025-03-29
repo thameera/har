@@ -26,25 +26,25 @@ export function RequestTab({ request }: RequestTabProps) {
         <AccordionTrigger>URL</AccordionTrigger>
         <AccordionContent>
           <div className="space-y-1">
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-start gap-2">
               <h4 className="text-sm text-emerald-600 dark:text-emerald-500">
                 Domain
               </h4>
-              <div className="font-mono text-sm">{url.hostname}</div>
+              <div className="font-mono text-sm break-all">{url.hostname}</div>
             </div>
             {url.port && url.port !== "443" && (
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-start gap-2">
                 <h4 className="text-sm text-emerald-600 dark:text-emerald-500">
                   Port
                 </h4>
-                <div className="font-mono text-sm">{url.port}</div>
+                <div className="font-mono text-sm break-all">{url.port}</div>
               </div>
             )}
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-start gap-2">
               <h4 className="text-sm text-emerald-600 dark:text-emerald-500">
                 Path
               </h4>
-              <div className="font-mono text-sm">{url.pathname}</div>
+              <div className="font-mono text-sm break-all">{url.pathname}</div>
             </div>
             {searchParams.toString() && (
               <div>
@@ -52,10 +52,10 @@ export function RequestTab({ request }: RequestTabProps) {
                 <div className="space-y-1">
                   {Array.from(searchParams.entries()).map(([key, value]) => (
                     <div key={key} className="font-mono text-sm">
-                      <span className="text-emerald-600 dark:text-emerald-500">
+                      <span className="text-emerald-600 dark:text-emerald-500 break-all">
                         {key}
                       </span>
-                      <span className="text-gray-600 dark:text-gray-400 ml-2">
+                      <span className="text-gray-600 dark:text-gray-400 ml-2 break-all">
                         {value}
                       </span>
                     </div>
@@ -69,10 +69,10 @@ export function RequestTab({ request }: RequestTabProps) {
                 <div className="space-y-1">
                   {Array.from(hashParams.entries()).map(([key, value]) => (
                     <div key={key} className="font-mono text-sm">
-                      <span className="text-emerald-600 dark:text-emerald-500">
+                      <span className="text-emerald-600 dark:text-emerald-500 break-all">
                         {key}
                       </span>
-                      <span className="text-gray-600 dark:text-gray-400 ml-2">
+                      <span className="text-gray-600 dark:text-gray-400 ml-2 break-all">
                         {value}
                       </span>
                     </div>
@@ -90,10 +90,10 @@ export function RequestTab({ request }: RequestTabProps) {
           <div className="space-y-1">
             {request.request.headers.map((header) => (
               <div key={header.name} className="font-mono text-sm">
-                <span className="text-emerald-600 dark:text-emerald-500">
+                <span className="text-emerald-600 dark:text-emerald-500 break-all">
                   {header.name}
                 </span>
-                <span className="text-gray-600 dark:text-gray-400 ml-2">
+                <span className="text-gray-600 dark:text-gray-400 ml-2 break-all">
                   {header.value}
                 </span>
               </div>
