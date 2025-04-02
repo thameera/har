@@ -62,16 +62,21 @@ export function RequestTab({ request }: RequestTabProps) {
               <div>
                 <h4 className="text-sm font-medium mb-2">Query Parameters</h4>
                 <div className="space-y-1">
-                  {Array.from(searchParams.entries()).map(([key, value]) => (
-                    <div key={key} className="font-mono text-sm">
-                      <span className="text-emerald-600 dark:text-emerald-500 break-all">
-                        {key}
-                      </span>
-                      <span className="text-gray-600 dark:text-gray-400 ml-2 break-all">
-                        {value}
-                      </span>
-                    </div>
-                  ))}
+                  {Array.from(searchParams.entries()).map(
+                    ([key, value], index) => (
+                      <div
+                        key={`${key}-${index}`}
+                        className="font-mono text-sm"
+                      >
+                        <span className="text-emerald-600 dark:text-emerald-500 break-all">
+                          {key}
+                        </span>
+                        <span className="text-gray-600 dark:text-gray-400 ml-2 break-all">
+                          {value}
+                        </span>
+                      </div>
+                    ),
+                  )}
                 </div>
               </div>
             )}
@@ -79,16 +84,21 @@ export function RequestTab({ request }: RequestTabProps) {
               <div>
                 <h4 className="text-sm font-medium mb-2">Hash Fragment</h4>
                 <div className="space-y-1">
-                  {Array.from(hashParams.entries()).map(([key, value]) => (
-                    <div key={key} className="font-mono text-sm">
-                      <span className="text-emerald-600 dark:text-emerald-500 break-all">
-                        {key}
-                      </span>
-                      <span className="text-gray-600 dark:text-gray-400 ml-2 break-all">
-                        {value}
-                      </span>
-                    </div>
-                  ))}
+                  {Array.from(hashParams.entries()).map(
+                    ([key, value], index) => (
+                      <div
+                        key={`${key}-${index}`}
+                        className="font-mono text-sm"
+                      >
+                        <span className="text-emerald-600 dark:text-emerald-500 break-all">
+                          {key}
+                        </span>
+                        <span className="text-gray-600 dark:text-gray-400 ml-2 break-all">
+                          {value}
+                        </span>
+                      </div>
+                    ),
+                  )}
                 </div>
               </div>
             )}
@@ -101,8 +111,11 @@ export function RequestTab({ request }: RequestTabProps) {
           <AccordionTrigger>Form Data</AccordionTrigger>
           <AccordionContent>
             <div className="space-y-1">
-              {request.request.postData?.params?.map((param) => (
-                <div key={param.name} className="font-mono text-sm">
+              {request.request.postData?.params?.map((param, index) => (
+                <div
+                  key={`${param.name}-${index}`}
+                  className="font-mono text-sm"
+                >
                   <span className="text-emerald-600 dark:text-emerald-500 break-all">
                     {param.name}
                   </span>
@@ -135,8 +148,11 @@ export function RequestTab({ request }: RequestTabProps) {
         <AccordionTrigger>Request Headers</AccordionTrigger>
         <AccordionContent>
           <div className="space-y-1">
-            {request.request.headers.map((header) => (
-              <div key={header.name} className="font-mono text-sm">
+            {request.request.headers.map((header, index) => (
+              <div
+                key={`${header.name}-${index}`}
+                className="font-mono text-sm"
+              >
                 <span className="text-emerald-600 dark:text-emerald-500 break-all">
                   {header.name}
                 </span>
