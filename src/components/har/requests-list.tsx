@@ -40,13 +40,11 @@ export const RequestsList = () => {
                   ? "bg-blue-100 dark:bg-blue-900/30"
                   : ""
               }`}
+              onClick={() =>
+                selectRequest(selectedRequest === request ? null : request)
+              }
             >
-              <div
-                className="flex-1 min-w-0"
-                onClick={() =>
-                  selectRequest(selectedRequest === request ? null : request)
-                }
-              >
+              <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="px-2 py-0.5 text-xs rounded bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100">
                     {request.request.method}
