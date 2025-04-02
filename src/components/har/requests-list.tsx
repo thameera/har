@@ -1,6 +1,15 @@
 import { useHar } from "./har-provider";
 import { PinIcon } from "lucide-react";
 
+const formatRequestTime = (dateTimeString: string): string => {
+  try {
+    const date = new Date(dateTimeString);
+    return date.toISOString().split("T")[1].substring(0, 12);
+  } catch {
+    return "(time unknown)";
+  }
+};
+
 export const RequestsList = () => {
   const {
     getAllRequests,
@@ -72,6 +81,9 @@ export const RequestsList = () => {
                   </span>
                   <span>{formatSize(request.response.content.size)}</span>
                   <span>{formatTime(request.time)}ms</span>
+                  <span className="px-1.5 rounded bg-gray-100 dark:bg-gray-700">
+                    {formatRequestTime(request.startedDateTime)}
+                  </span>
                 </div>
               </div>
               <button
