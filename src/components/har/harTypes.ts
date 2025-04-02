@@ -10,6 +10,11 @@ export interface HarRequest {
     cookies: Array<{ name: string; value: string }>;
     headersSize: number;
     bodySize: number;
+    postData?: {
+      mimeType: string;
+      params?: Array<{ name: string; value: string }>;
+      text?: string;
+    };
   };
   response: {
     status: number;

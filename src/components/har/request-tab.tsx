@@ -15,12 +15,24 @@ export function RequestTab({ request }: RequestTabProps) {
   const searchParams = new URLSearchParams(url.search);
   const hash = url.hash.slice(1); // Remove the # symbol
   const hashParams = new URLSearchParams(hash);
+  const isPostRequest = request.request.method.toUpperCase() === "POST";
+  const hasFormData =
+    isPostRequest &&
+    request.request.postData?.params &&
+    request.request.postData.params.length > 0;
+  const hasRawPostData =
+    isPostRequest && request.request.postData?.text && !hasFormData;
 
   return (
     <Accordion
       type="multiple"
       className="w-full"
-      defaultValue={["url", "headers"]}
+      defaultValue={[
+        "url",
+        "headers",
+        ...(hasFormData ? ["formdata"] : []),
+        ...(hasRawPostData ? ["rawpostdata"] : []),
+      ]}
     >
       <AccordionItem value="url">
         <AccordionTrigger>URL</AccordionTrigger>
@@ -83,6 +95,41 @@ export function RequestTab({ request }: RequestTabProps) {
           </div>
         </AccordionContent>
       </AccordionItem>
+
+      {hasFormData && (
+        <AccordionItem value="formdata">
+          <AccordionTrigger>Form Data</AccordionTrigger>
+          <AccordionContent>
+            <div className="space-y-1">
+              {request.request.postData?.params?.map((param) => (
+                <div key={param.name} className="font-mono text-sm">
+                  <span className="text-emerald-600 dark:text-emerald-500 break-all">
+                    {param.name}
+                  </span>
+                  <span className="text-gray-600 dark:text-gray-400 ml-2 break-all">
+                    {param.value}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+      )}
+
+      {hasRawPostData && (
+        <AccordionItem value="rawpostdata">
+          <AccordionTrigger>
+            POST Data ({request.request.postData?.mimeType || "Unknown Type"})
+          </AccordionTrigger>
+          <AccordionContent>
+            <div className="space-y-1">
+              <pre className="font-mono text-sm whitespace-pre-wrap break-all bg-secondary/30 p-2 rounded">
+                {request.request.postData?.text}
+              </pre>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+      )}
 
       <AccordionItem value="headers">
         <AccordionTrigger>Request Headers</AccordionTrigger>
