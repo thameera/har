@@ -16,6 +16,9 @@ export function RequestDetails({ request }: RequestDetailsProps) {
 
   return (
     <div className="p-4 space-y-2">
+      <div className="mb-2 text-sm text-gray-900 dark:text-gray-100">
+        {request.startedDateTime.replace("T", " ")}
+      </div>
       <RequestDetailURL method={method} url={url} />
       <RequestDetailStatus status={status} />
 
