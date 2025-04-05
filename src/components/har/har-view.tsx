@@ -64,6 +64,11 @@ export default function HarView() {
                   onClick={handlePanelToggle}
                   className="absolute -left-3 top-1/2 -translate-y-1/2 bg-muted hover:bg-muted/80 py-1 px-1 rounded-r-md border border-l-0 border-border transition-colors z-10 shadow-sm flex flex-col items-center gap-1"
                   style={{ width: "16px", padding: "3px 0" }}
+                  title={
+                    isPinnedPanelExpanded
+                      ? "Hide pinned requests"
+                      : "Show pinned requests"
+                  }
                 >
                   <PinIcon className="h-3.5 w-3.5" />
                   {isPinnedPanelExpanded ? (
