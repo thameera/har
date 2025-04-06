@@ -22,8 +22,7 @@ export function RequestDetailURL({ method, url }: RequestDetailURLProps) {
           {urlObj.port ? `:${urlObj.port}` : ""}
         </span>
         <span className="text-gray-600 dark:text-gray-400">
-          {decodeURIComponent(urlObj.pathname) +
-            decodeURIComponent(urlObj.search)}
+          {urlObj.pathname}
         </span>
         {urlObj.search && (
           <span className="text-gray-600 dark:text-gray-400">
