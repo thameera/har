@@ -69,10 +69,10 @@ export function RequestTab({ request }: RequestTabProps) {
                         className="font-mono text-sm"
                       >
                         <span className="text-emerald-600 dark:text-emerald-500 break-all">
-                          {key}
+                          {decodeURIComponent(key)}
                         </span>
                         <span className="text-gray-600 dark:text-gray-400 ml-2 break-all">
-                          {value}
+                          {decodeURIComponent(value)}
                         </span>
                       </div>
                     ),
@@ -91,10 +91,10 @@ export function RequestTab({ request }: RequestTabProps) {
                         className="font-mono text-sm"
                       >
                         <span className="text-emerald-600 dark:text-emerald-500 break-all">
-                          {key}
+                          {decodeURIComponent(key)}
                         </span>
                         <span className="text-gray-600 dark:text-gray-400 ml-2 break-all">
-                          {value}
+                          {decodeURIComponent(value)}
                         </span>
                       </div>
                     ),
@@ -117,10 +117,10 @@ export function RequestTab({ request }: RequestTabProps) {
                   className="font-mono text-sm"
                 >
                   <span className="text-emerald-600 dark:text-emerald-500 break-all">
-                    {param.name}
+                    {decodeURIComponent(param.name)}
                   </span>
                   <span className="text-gray-600 dark:text-gray-400 ml-2 break-all">
-                    {param.value}
+                    {decodeURIComponent(param.value)}
                   </span>
                 </div>
               ))}
