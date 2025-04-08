@@ -60,7 +60,9 @@ export function RequestTab({ request }: RequestTabProps) {
             </div>
             {searchParams.toString() && (
               <div>
-                <h4 className="text-sm font-medium mb-2">Query Parameters</h4>
+                <h4 className="text-sm text-blue-600 dark:text-blue-500 mt-2 mb-1">
+                  Query Parameters:
+                </h4>
                 <div className="space-y-1">
                   {Array.from(searchParams.entries()).map(
                     ([key, value], index) => (
@@ -82,7 +84,9 @@ export function RequestTab({ request }: RequestTabProps) {
             )}
             {hash && (
               <div>
-                <h4 className="text-sm font-medium mb-2">Hash Fragment</h4>
+                <h4 className="text-sm text-blue-600 dark:text-blue-500 mt-2 mb-1">
+                  Hash Fragment:
+                </h4>
                 <div className="space-y-1">
                   {Array.from(hashParams.entries()).map(
                     ([key, value], index) => (
