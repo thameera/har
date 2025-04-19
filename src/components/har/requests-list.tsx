@@ -77,11 +77,11 @@ export const RequestsList = () => {
                   <span className={getStatusColor(request.response.status)}>
                     {request.response.status}
                   </span>
-                  <span>{formatSize(request.response.content.size)}</span>
-                  <span>{formatTime(request.time)}ms</span>
                   <span className="px-1.5 rounded bg-gray-100 dark:bg-gray-700">
                     {formatRequestTime(request.startedDateTime)}
                   </span>
+                  <span>{formatSize(request.response.content.size)}</span>
+                  <span>{formatTime(request.time)}ms</span>
                 </div>
               </div>
               <button
