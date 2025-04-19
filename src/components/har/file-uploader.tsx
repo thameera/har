@@ -98,9 +98,10 @@ export function FileUploader() {
       )}
       <div
         {...getRootProps()}
-        className={`border-dashed border-2 border-border bg-muted/50 rounded-lg p-6 text-center transition-colors duration-200 ${
-          isDragActive ? "bg-muted" : ""
-        } ${isLoading ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+        className={` min-h-full flex items-center justify-center
+                     border-dashed border-2 border-border bg-muted/50 rounded-lg p-6 text-center transition-colors duration-200 ${
+                       isDragActive ? "bg-muted" : ""
+                     } ${isLoading ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
       >
         <input {...getInputProps()} />
         {isLoading ? (

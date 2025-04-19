@@ -27,7 +27,7 @@ export function RequestDetailURL({ method, url }: RequestDetailURLProps) {
         {urlObj.search && (
           <span className="text-gray-600 dark:text-gray-400">
             {Array.from(searchParams.entries()).map(([key, value], index) => (
-              <span key={key}>
+              <span key={`${key}-${index}`}>
                 {index === 0 ? "?" : "&"}
                 <span className="text-purple-500 dark:text-purple-400">
                   {key}
@@ -44,7 +44,7 @@ export function RequestDetailURL({ method, url }: RequestDetailURLProps) {
           <span className="text-gray-600 dark:text-gray-400">
             #
             {Array.from(hashParams.entries()).map(([key, value], index) => (
-              <span key={key}>
+              <span key={`${key}-${index}`}>
                 {index === 0 ? "" : "&"}
                 <span className="text-purple-500 dark:text-purple-400">
                   {key}
