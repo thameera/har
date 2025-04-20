@@ -8,6 +8,7 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
   const [selectedRequest, setSelectedRequest] = useState<HarRequest | null>(
     null,
   );
+  const [pinnedRequests, setPinnedRequests] = useState<HarRequest[]>([]);
 
   const getAllRequests = (): HarRequest[] => {
     if (!harData?.log?.entries) {
@@ -27,6 +28,8 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
     request._custom.pinned = !request._custom.pinned;
     // Force re-render by creating a new state object
     setHarFile({ ...harData! });
+    // TODO this is a hack. Must be in order ideally
+    setPinnedRequests((prev) => [...prev, request]);
   };
 
   const isPinned = (request: HarRequest): boolean => {
@@ -51,6 +54,7 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
         togglePinRequest,
         isPinned,
         getPinnedRequests,
+        pinnedRequests,
       }}
     >
       {children}

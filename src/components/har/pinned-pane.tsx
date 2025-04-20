@@ -1,10 +1,29 @@
+import { useEffect, useRef, useState } from "react";
 import { useHar } from "./har-provider";
 import { RequestDetails } from "./request-details";
-import { X } from "lucide-react";
+import {
+  DockviewReact,
+  IDockviewPanelProps,
+  DockviewApi,
+} from "dockview-react";
+import "dockview-react/dist/styles/dockview.css";
 
 export function PinnedPane() {
-  const { getPinnedRequests, togglePinRequest } = useHar();
-  const pinnedRequests = getPinnedRequests();
+  const [key, setKey] = useState(0); // Used to force re-render of dockview
+  const dockviewApiRef = useRef<DockviewApi | null>(null);
+
+  const { getPinnedRequests, pinnedRequests } = useHar();
+  //const pinnedRequests = getPinnedRequests(); // TODO remove?
+
+  // Update key whenever pinnedRequests changes to force dockview rebuild
+  useEffect(() => {
+    setKey((prev) => prev + 1);
+  }, [pinnedRequests]);
+
+  const RequestDetailsPanel = (props: IDockviewPanelProps) => {
+    const { request } = props.params;
+    return <RequestDetails request={request} />;
+  };
 
   if (pinnedRequests.length === 0) {
     return (
@@ -22,61 +41,53 @@ export function PinnedPane() {
         Pinned Requests ({pinnedRequests.length})
       </div>
 
-      {/* Absolute positioned scroll container to ensure proper sizing */}
-      <div
-        style={{
-          position: "absolute",
-          top: "48px",
-          bottom: "0",
-          left: "0",
-          right: "0",
-          overflowY: "auto",
-          padding: "8px",
-        }}
-      >
-        {/* Pinned request items */}
-        {pinnedRequests.map((request, index) => (
-          <div
-            key={`request-${index}`}
-            className="mb-4 rounded border border-border"
-            style={{
-              height: "300px",
-              minHeight: "200px",
-            }}
-          >
-            <div className="p-2 h-full flex flex-col bg-background">
-              <div className="flex justify-between items-center mb-2 px-1">
-                <div className="font-medium truncate flex items-center gap-2">
-                  <span className="px-2 py-0.5 text-xs rounded bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100">
-                    {request.request.method}
-                  </span>
-                  <span className="truncate text-sm">
-                    {(() => {
-                      try {
-                        return new URL(request.request.url).pathname;
-                      } catch {
-                        return request.request.url.substring(0, 50);
-                      }
-                    })()}
-                  </span>
-                </div>
-                <button
-                  onClick={() => togglePinRequest(request)}
-                  className="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 icon-button"
-                  title="Unpin request"
-                >
-                  <X className="h-4 w-4 icon-button" />
-                </button>
-              </div>
-              <div className="flex-1 overflow-auto border-t">
-                <RequestDetails request={request} />
-              </div>
-            </div>
-          </div>
-        ))}
+      <div className="h-full flex flex-col">
+        <div className="flex-grow dockview-theme-light border rounded overflow-hidden">
+          <div className="h-full">
+            <DockviewReact
+              key={key}
+              components={{
+                reqDetail: RequestDetailsPanel,
+                // TODO set panel header to path (?)
+              }}
+              className="h-full"
+              onReady={(event) => {
+                // Store the API reference
+                dockviewApiRef.current = event.api;
 
-        {/* Small padding at the bottom to ensure proper scrolling */}
-        <div style={{ height: "16px" }}></div>
+                // Create panels for each pinned request with vertical splitting
+                let previousPanelId: string | undefined;
+
+                pinnedRequests.forEach((request, index) => {
+                  const options: any = {
+                    id: request.time.toString(), // TODO change this to some ID
+                    component: "reqDetail",
+                    title: request.request.url,
+                    params: { request },
+                  };
+
+                  // For the first panel, just add it normally
+                  if (index === 0) {
+                    const panel = event.api.addPanel(options);
+                    previousPanelId = panel.id;
+                    panel.api.setActive();
+                  } else {
+                    // For subsequent panels, position them as vertical splits
+                    options.position = {
+                      referencePanel: previousPanelId,
+                      direction: "below",
+                    };
+
+                    const panel = event.api.addPanel(options);
+                    previousPanelId = panel.id;
+                  }
+                });
+
+                // TODO handle panel closing
+              }}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

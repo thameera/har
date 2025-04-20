@@ -78,7 +78,7 @@ export default function HarView() {
                   )}
                 </button>
                 <div
-                  className={`${isPinnedPanelExpanded ? "opacity-100" : "opacity-0"} transition-opacity duration-300 ml-4`}
+                  className={`${isPinnedPanelExpanded ? "opacity-100" : "opacity-0"} transition-opacity duration-300 ml-4 h-full`}
                 >
                   <PinnedPane />
                 </div>
