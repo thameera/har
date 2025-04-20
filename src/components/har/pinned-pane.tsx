@@ -12,8 +12,7 @@ export function PinnedPane() {
   const [key, setKey] = useState(0); // Used to force re-render of dockview
   const dockviewApiRef = useRef<DockviewApi | null>(null);
 
-  const { getPinnedRequests, pinnedRequests } = useHar();
-  //const pinnedRequests = getPinnedRequests(); // TODO remove?
+  const { pinnedRequests } = useHar();
 
   // Update key whenever pinnedRequests changes to force dockview rebuild
   useEffect(() => {

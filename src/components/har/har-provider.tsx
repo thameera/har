@@ -25,22 +25,24 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
     if (!request._custom) {
       request._custom = {};
     }
+
+    // Toggle the pinned status
     request._custom.pinned = !request._custom.pinned;
-    // Force re-render by creating a new state object
+
+    // Force re-render by creating a new harData state object
     setHarFile({ ...harData! });
-    // TODO this is a hack. Must be in order ideally
-    setPinnedRequests((prev) => [...prev, request]);
+
+    // Update pinnedRequests while maintaining original order
+    if (harData?.log?.entries) {
+      const orderedPinnedRequests = harData.log.entries.filter(
+        (req) => req._custom?.pinned,
+      );
+      setPinnedRequests(orderedPinnedRequests);
+    }
   };
 
   const isPinned = (request: HarRequest): boolean => {
     return !!request._custom?.pinned;
-  };
-
-  const getPinnedRequests = (): HarRequest[] => {
-    if (!harData?.log?.entries) {
-      return [];
-    }
-    return harData.log.entries.filter((req) => req._custom?.pinned === true);
   };
 
   return (
@@ -53,7 +55,6 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
         selectRequest,
         togglePinRequest,
         isPinned,
-        getPinnedRequests,
         pinnedRequests,
       }}
     >
