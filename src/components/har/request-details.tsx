@@ -15,33 +15,35 @@ export function RequestDetails({ request }: RequestDetailsProps) {
   const { status } = request.response;
 
   return (
-    <div className="p-4 space-y-2">
-      <div className="mb-2 text-sm text-gray-900 dark:text-gray-100">
-        {request.startedDateTime.replace("T", " ")}
-      </div>
-      <RequestDetailURL method={method} url={url} />
-      <RequestDetailStatus status={status} />
+    <div className="h-full overflow-auto">
+      <div className="p-4 space-y-2">
+        <div className="mb-2 text-sm text-gray-900 dark:text-gray-100">
+          {request.startedDateTime.replace("T", " ")}
+        </div>
+        <RequestDetailURL method={method} url={url} />
+        <RequestDetailStatus status={status} />
 
-      <div className="mt-6">
-        <Tabs defaultValue="request" className="w-full">
-          <TabsList>
-            <TabsTrigger value="request">Request</TabsTrigger>
-            <TabsTrigger value="response">Response</TabsTrigger>
-            <TabsTrigger value="cookies">Cookies</TabsTrigger>
-          </TabsList>
+        <div className="mt-6">
+          <Tabs defaultValue="request" className="w-full">
+            <TabsList>
+              <TabsTrigger value="request">Request</TabsTrigger>
+              <TabsTrigger value="response">Response</TabsTrigger>
+              <TabsTrigger value="cookies">Cookies</TabsTrigger>
+            </TabsList>
 
-          <TabsContent value="request" className="mt-4">
-            <RequestTab request={request} />
-          </TabsContent>
+            <TabsContent value="request" className="mt-4">
+              <RequestTab request={request} />
+            </TabsContent>
 
-          <TabsContent value="response" className="mt-4">
-            <ResponseTab request={request} />
-          </TabsContent>
+            <TabsContent value="response" className="mt-4">
+              <ResponseTab request={request} />
+            </TabsContent>
 
-          <TabsContent value="cookies" className="mt-4">
-            <CookiesTab request={request} />
-          </TabsContent>
-        </Tabs>
+            <TabsContent value="cookies" className="mt-4">
+              <CookiesTab request={request} />
+            </TabsContent>
+          </Tabs>
+        </div>
       </div>
     </div>
   );
