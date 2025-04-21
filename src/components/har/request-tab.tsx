@@ -74,7 +74,9 @@ export function RequestTab({ request }: RequestTabProps) {
                           {decodeURIComponent(key)}
                         </span>
                         <span className="text-gray-600 dark:text-gray-400 ml-2 break-all">
-                          {decodeURIComponent(value)}
+                          {value.includes("[...redacted...]")
+                            ? value
+                            : decodeURIComponent(value)}
                         </span>
                       </div>
                     ),
