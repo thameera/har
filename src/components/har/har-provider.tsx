@@ -4,11 +4,25 @@ import { HarContextType, HarData, HarRequest } from "./harTypes";
 const HarContext = createContext<HarContextType | undefined>(undefined);
 
 export function HarProvider({ children }: { children: React.ReactNode }) {
-  const [harData, setHarFile] = useState<HarData | null>(null);
+  const [harData, setHarData] = useState<HarData | null>(null);
   const [selectedRequest, setSelectedRequest] = useState<HarRequest | null>(
     null,
   );
   const [pinnedRequests, setPinnedRequests] = useState<HarRequest[]>([]);
+
+  const setHarFile = (data: HarData) => {
+    // Set the id for each request
+    if (data?.log?.entries) {
+      data.log.entries.forEach((request, index) => {
+        if (!request._custom) {
+          request._custom = {};
+        }
+        request._custom.id = index;
+      });
+    }
+
+    setHarData(data);
+  };
 
   const getAllRequests = (): HarRequest[] => {
     if (!harData?.log?.entries) {
@@ -30,7 +44,7 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
     request._custom.pinned = !request._custom.pinned;
 
     // Force re-render by creating a new harData state object
-    setHarFile({ ...harData! });
+    setHarData({ ...harData! });
 
     // Update pinnedRequests while maintaining original order
     if (harData?.log?.entries) {

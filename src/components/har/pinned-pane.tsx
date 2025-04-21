@@ -59,7 +59,7 @@ export function PinnedPane() {
 
                 pinnedRequests.forEach((request, index) => {
                   const options: any = {
-                    id: request.time.toString(), // TODO change this to some ID
+                    id: request._custom?.id?.toString() ?? "",
                     component: "reqDetail",
                     title: request.request.url,
                     params: { request },

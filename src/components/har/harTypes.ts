@@ -39,6 +39,7 @@ export interface HarRequest {
   };
   _custom?: {
     pinned?: boolean;
+    id?: number;
   };
 }
 
