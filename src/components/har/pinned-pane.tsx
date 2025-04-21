@@ -5,12 +5,17 @@ import {
   DockviewReact,
   IDockviewPanelProps,
   DockviewApi,
+  themeLightSpaced,
+  themeAbyssSpaced,
 } from "dockview-react";
 import "dockview-react/dist/styles/dockview.css";
+import { useTheme } from "next-themes";
 
 export function PinnedPane() {
   const [key, setKey] = useState(0); // Used to force re-render of dockview
   const dockviewApiRef = useRef<DockviewApi | null>(null);
+
+  const { theme } = useTheme();
 
   const { pinnedRequests } = useHar();
 
@@ -50,6 +55,7 @@ export function PinnedPane() {
                 // TODO set panel header to path (?)
               }}
               className="h-full"
+              theme={theme === "light" ? themeLightSpaced : themeAbyssSpaced}
               onReady={(event) => {
                 // Store the API reference
                 dockviewApiRef.current = event.api;
