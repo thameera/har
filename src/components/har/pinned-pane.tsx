@@ -15,9 +15,11 @@ export function PinnedPane() {
   const [key, setKey] = useState(0); // Used to force re-render of dockview
   const dockviewApiRef = useRef<DockviewApi | null>(null);
 
+
   const { theme } = useTheme();
 
-  const { pinnedRequests } = useHar();
+  const { pinnedRequests, togglePin } = useHar();
+
 
   // Update key whenever pinnedRequests changes to force dockview rebuild
   useEffect(() => {
@@ -65,7 +67,7 @@ export function PinnedPane() {
 
                 pinnedRequests.forEach((request, index) => {
                   const options: any = {
-                    id: request.time.toString(), // TODO change this to some ID
+                    id: request._custom?.id?.toString() ?? "-1",
                     component: "reqDetail",
                     title: request.request.url,
                     params: { request },
@@ -88,7 +90,10 @@ export function PinnedPane() {
                   }
                 });
 
-                // TODO handle panel closing
+                // Add event listener for panel closing
+                event.api.onDidRemovePanel((panel) => {
+                  togglePin(parseInt(panel.id));
+                });
               }}
             />
           </div>
