@@ -62,7 +62,7 @@ export interface HarContextType {
   getAllRequests: () => HarRequest[];
   selectedRequest: HarRequest | null;
   selectRequest: (request: HarRequest | null) => void;
-  togglePinRequest: (request: HarRequest) => void;
+  togglePin: (id: number) => void;
   isPinned: (request: HarRequest) => boolean;
   pinnedRequests: HarRequest[];
 }

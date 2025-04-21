@@ -35,13 +35,17 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
     setSelectedRequest(request);
   };
 
-  const togglePinRequest = (request: HarRequest) => {
-    if (!request._custom) {
-      request._custom = {};
+  const togglePin = (id: number) => {
+    const request: HarRequest | undefined = harData?.log?.entries?.find(
+      (req) => req._custom?.id === id,
+    );
+    if (!request) {
+      console.error(`Request with id ${id} not found`);
+      return;
     }
 
     // Toggle the pinned status
-    request._custom.pinned = !request._custom.pinned;
+    request._custom!.pinned = !request._custom!.pinned;
 
     // Force re-render by creating a new harData state object
     setHarData({ ...harData! });
@@ -67,7 +71,7 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
         getAllRequests,
         selectedRequest,
         selectRequest,
-        togglePinRequest,
+        togglePin,
         isPinned,
         pinnedRequests,
       }}

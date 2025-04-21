@@ -15,7 +15,7 @@ export const RequestsList = () => {
     getAllRequests,
     selectedRequest,
     selectRequest,
-    togglePinRequest,
+    togglePin,
     isPinned,
   } = useHar();
   const requests = getAllRequests();
@@ -87,7 +87,7 @@ export const RequestsList = () => {
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  togglePinRequest(request);
+                  togglePin(request._custom?.id ?? -1);
                 }}
                 className={`p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors icon-button ${
                   isPinned(request)
