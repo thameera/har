@@ -52,7 +52,7 @@ export function FileUploader() {
     return () => {
       worker.terminate();
     };
-  }, []);
+  }, [setHarFile]);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length === 0) {
