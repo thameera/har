@@ -4,7 +4,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { HarRequest } from "./harTypes";
+import { HarRequest } from "../types/harTypes";
 
 interface ResponseTabProps {
   request: HarRequest;

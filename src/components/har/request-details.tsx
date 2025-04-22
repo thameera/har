@@ -1,10 +1,11 @@
-import { HarRequest } from "./harTypes";
+import { HarRequest } from "../types/harTypes";
 import { RequestDetailURL } from "./request-detail-url";
 import { RequestDetailStatus } from "./request-detail-status";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { RequestTab } from "./request-tab";
 import { ResponseTab } from "./response-tab";
 import { CookiesTab } from "./cookies-tab";
+import { SamlResponseTab } from "./samlresponse-tab";
 
 interface RequestDetailsProps {
   request: HarRequest;
@@ -13,6 +14,14 @@ interface RequestDetailsProps {
 export function RequestDetails({ request }: RequestDetailsProps) {
   const { method, url } = request.request;
   const { status } = request.response;
+
+  const isSaml =
+    request.request.method.toUpperCase() === "POST" &&
+    request.request.postData?.params &&
+    request.request.postData.params.length > 0 &&
+    request.request.postData.params.some(
+      (param) => param.name === "SAMLResponse" || param.name === "SAMLRequest",
+    );
 
   return (
     <div className="h-full overflow-auto">
@@ -29,6 +38,7 @@ export function RequestDetails({ request }: RequestDetailsProps) {
               <TabsTrigger value="request">Request</TabsTrigger>
               <TabsTrigger value="response">Response</TabsTrigger>
               <TabsTrigger value="cookies">Cookies</TabsTrigger>
+              {isSaml && <TabsTrigger value="saml">SAML</TabsTrigger>}
             </TabsList>
 
             <TabsContent value="request" className="mt-4">
@@ -41,6 +51,10 @@ export function RequestDetails({ request }: RequestDetailsProps) {
 
             <TabsContent value="cookies" className="mt-4">
               <CookiesTab request={request} />
+            </TabsContent>
+
+            <TabsContent value="saml" className="mt-4">
+              <SamlResponseTab request={request} />
             </TabsContent>
           </Tabs>
         </div>
