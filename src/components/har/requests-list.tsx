@@ -40,9 +40,7 @@ export const RequestsList = () => {
                   ? "bg-blue-100 dark:bg-blue-900/30"
                   : ""
               }`}
-              onClick={() =>
-                selectRequest(selectedRequest === request ? null : request)
-              }
+              onClick={() => selectRequest(request)}
             >
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-2">
