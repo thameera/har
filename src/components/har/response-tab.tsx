@@ -44,7 +44,7 @@ export function ResponseTab({ request }: ResponseTabProps) {
     if (content.mimeType.toLowerCase().includes("json")) {
       try {
         return JSON.stringify(JSON.parse(content.text), null, 2);
-      } catch (error) {
+      } catch (_) {
         return `// Invalid JSON format\n${content.text}`;
       }
     }
