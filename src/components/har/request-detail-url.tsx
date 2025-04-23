@@ -15,7 +15,7 @@ export function RequestDetailURL({ method, url }: RequestDetailURLProps) {
         <span className="text-gray-900 dark:text-gray-100">{method}</span>
         <span className="text-gray-600 dark:text-gray-400"> </span>
         <span className="text-gray-600 dark:text-gray-400">
-          {urlObj.protocol}//
+          {urlObj.protocol + "//"}
         </span>
         <span className="text-blue-500 dark:text-blue-400 font-medium">
           {urlObj.hostname}

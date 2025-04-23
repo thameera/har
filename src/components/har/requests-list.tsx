@@ -54,7 +54,7 @@ export const RequestsList = () => {
                         return (
                           <>
                             <span className="text-gray-600 dark:text-gray-400">
-                              {url.protocol}//
+                              {url.protocol + "//"}
                             </span>
                             <span className="font-medium text-blue-500 dark:text-blue-200">
                               {url.hostname}
