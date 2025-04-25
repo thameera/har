@@ -7,6 +7,7 @@ import { useHar } from "./har-provider";
 import { RequestsList } from "./requests-list";
 import { DetailsPane } from "./details-pane";
 import { PinnedPane } from "./pinned-pane";
+import { Toolbar } from "./toolbar";
 
 export default function HarView() {
   const { harData } = useHar();
@@ -24,12 +25,15 @@ export default function HarView() {
           <FileUploader />
         </div>
       ) : (
-        <div className="h-full">
+        <div className="h-full flex flex-col">
+          {/* Toolbar */}
+          <Toolbar />
+
           {/* Using key to force complete re-render */}
           <PanelGroup
             key={`panel-group-${isPinnedPanelExpanded ? "expanded" : "collapsed"}`}
             direction="horizontal"
-            className="h-full"
+            className="flex-1"
           >
             <Panel
               defaultSize={isPinnedPanelExpanded ? 15 : 50}
