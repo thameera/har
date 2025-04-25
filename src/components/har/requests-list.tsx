@@ -31,7 +31,7 @@ export const RequestsList = () => {
   return (
     <div className="h-full overflow-hidden">
       <div className="h-full overflow-y-auto">
-        <div className="space-y-1 p-2">
+        <div className="p-2">
           {requests.map((request, index) => (
             <div
               key={index}
@@ -39,7 +39,7 @@ export const RequestsList = () => {
                 selectedRequest === request
                   ? "bg-blue-100 dark:bg-blue-900/30"
                   : ""
-              }`}
+              } border border-black dark:border-gray-600 mb-1 rounded-md`}
               onClick={() => selectRequest(request)}
             >
               <div className="flex-1 min-w-0">
