@@ -35,7 +35,7 @@ export const RequestsList = () => {
           {requests.map((request, index) => (
             <div
               key={index}
-              className={`flex items-center gap-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer rounded transition-colors duration-150 ${
+              className={`flex items-center gap-2 p-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer rounded transition-colors duration-150 ${
                 selectedRequest === request
                   ? "bg-blue-100 dark:bg-blue-900/30"
                   : ""
