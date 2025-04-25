@@ -83,6 +83,11 @@ function PanelsContainer() {
 
 export default function HarView() {
   const { harData } = useHar();
+  const [currentView, setCurrentView] = useState<string>("all");
+
+  const handleViewChange = (view: string) => {
+    setCurrentView(view);
+  };
 
   return (
     <div className="h-full har-view-small-font">
@@ -93,9 +98,16 @@ export default function HarView() {
       ) : (
         <div className="h-full flex flex-col">
           {/* Toolbar */}
-          <Toolbar />
+          <Toolbar onViewChange={handleViewChange} />
 
-          <PanelsContainer />
+          {/* Render content based on current view */}
+          {currentView === "all" ? (
+            <PanelsContainer />
+          ) : (
+            <div className="flex-1 bg-muted/50 p-4">
+              <PinnedPane />
+            </div>
+          )}
         </div>
       )}
     </div>
