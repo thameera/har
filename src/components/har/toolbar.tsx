@@ -20,7 +20,7 @@ export function Toolbar({ onViewChange }: ToolbarProps) {
   }, [view, onViewChange]);
 
   return (
-    <div className="bg-muted/70 p-2 border-b border-border mb-2 flex items-center">
+    <div className="bg-muted/70 p-2 border-b border-border flex items-center">
       <div className="mr-4">
         <ToggleGroup
           type="single"
