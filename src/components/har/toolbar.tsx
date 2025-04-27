@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { cn } from "@/lib/utils";
 
 interface ToolbarProps {
   onViewChange?: (view: string) => void;
@@ -25,11 +26,26 @@ export function Toolbar({ onViewChange }: ToolbarProps) {
             if (value) setView(value);
           }}
           variant="outline"
+          className="border border-input"
         >
-          <ToggleGroupItem value="all" className="px-4">
+          <ToggleGroupItem
+            value="all"
+            className={cn(
+              "px-4 font-medium",
+              view === "all" &&
+                "data-[state=on]:bg-primary data-[state=on]:text-primary-foreground",
+            )}
+          >
             All
           </ToggleGroupItem>
-          <ToggleGroupItem value="pinned" className="px-4">
+          <ToggleGroupItem
+            value="pinned"
+            className={cn(
+              "px-4 font-medium",
+              view === "pinned" &&
+                "data-[state=on]:bg-primary data-[state=on]:text-primary-foreground",
+            )}
+          >
             Pinned
           </ToggleGroupItem>
         </ToggleGroup>
