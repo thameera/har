@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { RequestTab } from "./request-tab";
 import { ResponseTab } from "./response-tab";
 import { CookiesTab } from "./cookies-tab";
-import { SamlResponseTab } from "./samlresponse-tab";
+import { getSaml } from "@/lib/utils";
 
 interface RequestDetailsProps {
   request: HarRequest;
@@ -15,19 +15,7 @@ export function RequestDetails({ request }: RequestDetailsProps) {
   const { method, url } = request.request;
   const { status } = request.response;
 
-  const isSaml =
-    request.request.method.toUpperCase() === "POST" &&
-    request.request.postData?.params &&
-    request.request.postData.params.length > 0 &&
-    request.request.postData.params.some(
-      (param) => param.name === "SAMLResponse" || param.name === "SAMLRequest",
-    );
-
-  const saml =
-    isSaml &&
-    request.request.postData?.params?.find(
-      (param) => param.name === "SAMLResponse" || param.name === "SAMLRequest",
-    );
+  const saml = getSaml(request);
 
   return (
     <div className="h-full overflow-auto">
@@ -44,15 +32,19 @@ export function RequestDetails({ request }: RequestDetailsProps) {
               <TabsTrigger value="request">Request</TabsTrigger>
               <TabsTrigger value="response">Response</TabsTrigger>
               <TabsTrigger value="cookies">Cookies</TabsTrigger>
-              {isSaml && (
-                <a
-                  href={`https://samltool.io/?${saml?.name}=${saml?.value}`}
-                  target="_blank"
-                >
-                  <TabsTrigger value="saml">Go to Samltool.io</TabsTrigger>
-                </a>
-              )}
             </TabsList>
+
+            {saml && (
+              <div className="my-1">
+                <a
+                  href={`https://samltool.io/?${saml.name}=${saml.value}`}
+                  target="_blank"
+                  className={`my-3 border bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 px-1.5 py-1 rounded cursor-pointer`}
+                >
+                  open in samltool.io
+                </a>
+              </div>
+            )}
 
             <TabsContent value="request" className="mt-4">
               <RequestTab request={request} />
@@ -64,15 +56,6 @@ export function RequestDetails({ request }: RequestDetailsProps) {
 
             <TabsContent value="cookies" className="mt-4">
               <CookiesTab request={request} />
-            </TabsContent>
-
-            <TabsContent value="saml" className="mt-4">
-              <a
-                href={`https://samltool.io/?${saml?.name}=${saml?.value}`}
-                target="_blank"
-              >
-                test
-              </a>
             </TabsContent>
           </Tabs>
         </div>

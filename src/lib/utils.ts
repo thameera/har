@@ -1,30 +1,27 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { XMLParser } from "fast-xml-parser";
+import { HarRequest } from "@/components/har/harTypes";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function decodeSAML(base64String: string) {
-  //url decoding
-  const urlDecode = decodeURIComponent(base64String);
+export function getSaml(request: HarRequest) {
+  const inFormData = request.request.postData?.params?.find(
+    (param) => param.name === "SAMLResponse" || param.name === "SAMLRequest",
+  );
 
-  //base64 decoding
-  const compressedBuffer = Buffer.from(urlDecode, "base64");
+  if (inFormData) return inFormData;
 
-  // to string
-  const stringXml = compressedBuffer.toString("utf-8");
+  const url = new URL(request.request.url);
+  const searchParams = new URLSearchParams(url.search);
+  const isSamlInQueryParams = searchParams
+    .entries()
+    .find(([key, value]) => key === "SAMLResponse" || key === "SAMLRequest");
 
-  //create parser
-  const parser = new XMLParser({
-    ignoreAttributes: false,
-    ignoreDeclaration: false,
-    trimValues: true,
-    attributeNamePrefix: "@_",
-  });
-  //xml string to json
-  const json = parser.parse(stringXml) as JSON;
+  if (isSamlInQueryParams)
+    return { name: isSamlInQueryParams[0], value: isSamlInQueryParams[1] };
 
-  return json;
+  return null;
 }
