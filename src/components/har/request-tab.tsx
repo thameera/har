@@ -4,7 +4,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { HarRequest } from "../types/harTypes";
+import { HarRequest } from "./harTypes";
+import { HoverCopyButton } from "./hover-copy-button";
 
 interface RequestTabProps {
   request: HarRequest;
@@ -23,6 +24,9 @@ export function RequestTab({ request }: RequestTabProps) {
   const hasRawPostData =
     isPostRequest && request.request.postData?.text && !hasFormData;
 
+  // Value container class for consistent styling
+  const valueContainerClass = "font-mono text-sm break-all group";
+
   return (
     <Accordion
       type="multiple"
@@ -38,25 +42,34 @@ export function RequestTab({ request }: RequestTabProps) {
         <AccordionTrigger>URL</AccordionTrigger>
         <AccordionContent>
           <div className="space-y-1">
-            <div className="flex flex-wrap items-start gap-2">
-              <h4 className="text-sm text-emerald-600 dark:text-emerald-500">
+            <div className="font-mono text-sm">
+              <span className="text-emerald-600 dark:text-emerald-500 break-all">
                 Domain
-              </h4>
-              <div className="font-mono text-sm break-all">{url.hostname}</div>
+              </span>
+              <span className="text-gray-600 dark:text-gray-400 break-all group">
+                <HoverCopyButton value={url.hostname} />
+                {url.hostname}
+              </span>
             </div>
             {url.port && url.port !== "443" && (
-              <div className="flex flex-wrap items-start gap-2">
-                <h4 className="text-sm text-emerald-600 dark:text-emerald-500">
+              <div className="font-mono text-sm">
+                <span className="text-emerald-600 dark:text-emerald-500 break-all">
                   Port
-                </h4>
-                <div className="font-mono text-sm break-all">{url.port}</div>
+                </span>
+                <span className="text-gray-600 dark:text-gray-400 break-all group">
+                  <HoverCopyButton value={url.port} />
+                  {url.port}
+                </span>
               </div>
             )}
-            <div className="flex flex-wrap items-start gap-2">
-              <h4 className="text-sm text-emerald-600 dark:text-emerald-500">
+            <div className="font-mono text-sm">
+              <span className="text-emerald-600 dark:text-emerald-500 break-all">
                 Path
-              </h4>
-              <div className="font-mono text-sm break-all">{url.pathname}</div>
+              </span>
+              <span className="text-gray-600 dark:text-gray-400 break-all group">
+                <HoverCopyButton value={url.pathname} />
+                {url.pathname}
+              </span>
             </div>
             {searchParams.toString() && (
               <div>
@@ -73,7 +86,14 @@ export function RequestTab({ request }: RequestTabProps) {
                         <span className="text-emerald-600 dark:text-emerald-500 break-all">
                           {decodeURIComponent(key)}
                         </span>
-                        <span className="text-gray-600 dark:text-gray-400 ml-2 break-all">
+                        <span className="text-gray-600 dark:text-gray-400 break-all group">
+                          <HoverCopyButton
+                            value={
+                              value.includes("[...redacted...]")
+                                ? value
+                                : decodeURIComponent(value)
+                            }
+                          />
                           {value.includes("[...redacted...]")
                             ? value
                             : decodeURIComponent(value)}
@@ -99,7 +119,8 @@ export function RequestTab({ request }: RequestTabProps) {
                         <span className="text-emerald-600 dark:text-emerald-500 break-all">
                           {decodeURIComponent(key)}
                         </span>
-                        <span className="text-gray-600 dark:text-gray-400 ml-2 break-all">
+                        <span className="text-gray-600 dark:text-gray-400 break-all group">
+                          <HoverCopyButton value={decodeURIComponent(value)} />
                           {decodeURIComponent(value)}
                         </span>
                       </div>
@@ -125,7 +146,8 @@ export function RequestTab({ request }: RequestTabProps) {
                   <span className="text-emerald-600 dark:text-emerald-500 break-all">
                     {decodeURIComponent(param.name)}
                   </span>
-                  <span className="text-gray-600 dark:text-gray-400 ml-2 break-all">
+                  <span className="text-gray-600 dark:text-gray-400 break-all group">
+                    <HoverCopyButton value={decodeURIComponent(param.value)} />
                     {decodeURIComponent(param.value)}
                   </span>
                 </div>
@@ -142,9 +164,15 @@ export function RequestTab({ request }: RequestTabProps) {
           </AccordionTrigger>
           <AccordionContent>
             <div className="space-y-1">
-              <pre className="font-mono text-sm whitespace-pre-wrap break-all bg-secondary/30 p-2 rounded">
-                {request.request.postData?.text}
-              </pre>
+              <div className="group relative">
+                <pre className="font-mono text-sm whitespace-pre-wrap break-all bg-secondary/30 p-2 rounded pr-10">
+                  {request.request.postData?.text}
+                </pre>
+                <HoverCopyButton
+                  value={request.request.postData?.text || ""}
+                  position="code-block"
+                />
+              </div>
             </div>
           </AccordionContent>
         </AccordionItem>
@@ -162,7 +190,8 @@ export function RequestTab({ request }: RequestTabProps) {
                 <span className="text-emerald-600 dark:text-emerald-500 break-all">
                   {header.name}
                 </span>
-                <span className="text-gray-600 dark:text-gray-400 ml-2 break-all">
+                <span className="text-gray-600 dark:text-gray-400 break-all group">
+                  <HoverCopyButton value={header.value} />
                   {header.value}
                 </span>
               </div>

@@ -1,4 +1,4 @@
-import { HarRequest } from "../types/harTypes";
+import { HarRequest } from "./harTypes";
 import { RequestDetailURL } from "./request-detail-url";
 import { RequestDetailStatus } from "./request-detail-status";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -23,6 +23,12 @@ export function RequestDetails({ request }: RequestDetailsProps) {
       (param) => param.name === "SAMLResponse" || param.name === "SAMLRequest",
     );
 
+  const saml =
+    isSaml &&
+    request.request.postData?.params?.find(
+      (param) => param.name === "SAMLResponse" || param.name === "SAMLRequest",
+    );
+
   return (
     <div className="h-full overflow-auto">
       <div className="p-4 space-y-2">
@@ -38,7 +44,14 @@ export function RequestDetails({ request }: RequestDetailsProps) {
               <TabsTrigger value="request">Request</TabsTrigger>
               <TabsTrigger value="response">Response</TabsTrigger>
               <TabsTrigger value="cookies">Cookies</TabsTrigger>
-              {isSaml && <TabsTrigger value="saml">SAML</TabsTrigger>}
+              {isSaml && (
+                <a
+                  href={`https://samltool.io/?${saml?.name}=${saml?.value}`}
+                  target="_blank"
+                >
+                  <TabsTrigger value="saml">Go to Samltool.io</TabsTrigger>
+                </a>
+              )}
             </TabsList>
 
             <TabsContent value="request" className="mt-4">
@@ -54,7 +67,12 @@ export function RequestDetails({ request }: RequestDetailsProps) {
             </TabsContent>
 
             <TabsContent value="saml" className="mt-4">
-              <SamlResponseTab request={request} />
+              <a
+                href={`https://samltool.io/?${saml?.name}=${saml?.value}`}
+                target="_blank"
+              >
+                test
+              </a>
             </TabsContent>
           </Tabs>
         </div>

@@ -4,7 +4,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { HarRequest } from "../types/harTypes";
+import { HarRequest } from "./harTypes";
+import { HoverCopyButton } from "./hover-copy-button";
 
 interface ResponseTabProps {
   request: HarRequest;
@@ -12,6 +13,9 @@ interface ResponseTabProps {
 
 export function ResponseTab({ request }: ResponseTabProps) {
   const { response } = request;
+
+  // Value container class for consistent styling
+  const valueContainerClass = "font-mono text-sm break-all group";
 
   // Determine if content can be displayed as text
   const canDisplayAsText = (content: { mimeType: string; text?: string }) => {
@@ -44,7 +48,7 @@ export function ResponseTab({ request }: ResponseTabProps) {
     if (content.mimeType.toLowerCase().includes("json")) {
       try {
         return JSON.stringify(JSON.parse(content.text), null, 2);
-      } catch (error) {
+      } catch (_) {
         return `// Invalid JSON format\n${content.text}`;
       }
     }
@@ -63,21 +67,23 @@ export function ResponseTab({ request }: ResponseTabProps) {
         <AccordionTrigger>Response Content</AccordionTrigger>
         <AccordionContent>
           <div className="space-y-1">
-            <div className="flex flex-wrap items-start gap-2">
-              <h4 className="text-sm text-emerald-600 dark:text-emerald-500">
+            <div className="font-mono text-sm">
+              <span className="text-emerald-600 dark:text-emerald-500 break-all">
                 MIME Type
-              </h4>
-              <div className="font-mono text-sm break-all">
+              </span>
+              <span className="text-gray-600 dark:text-gray-400 break-all group">
+                <HoverCopyButton value={response.content.mimeType} />
                 {response.content.mimeType}
-              </div>
+              </span>
             </div>
-            <div className="flex flex-wrap items-start gap-2">
-              <h4 className="text-sm text-emerald-600 dark:text-emerald-500">
+            <div className="font-mono text-sm">
+              <span className="text-emerald-600 dark:text-emerald-500 break-all">
                 Size
-              </h4>
-              <div className="font-mono text-sm break-all">
+              </span>
+              <span className="text-gray-600 dark:text-gray-400 break-all group">
+                <HoverCopyButton value={`${response.content.size} bytes`} />
                 {response.content.size} bytes
-              </div>
+              </span>
             </div>
 
             <div className="mt-4">
@@ -85,9 +91,15 @@ export function ResponseTab({ request }: ResponseTabProps) {
                 Content
               </h4>
               {canDisplayAsText(response.content) ? (
-                <pre className="font-mono text-sm p-2 bg-gray-50 dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-800 overflow-x-auto whitespace-pre-wrap break-words max-h-96 overflow-y-auto">
-                  {getPrettifiedContent(response.content)}
-                </pre>
+                <div className="group relative">
+                  <pre className="font-mono text-sm p-2 bg-gray-50 dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-800 overflow-x-auto whitespace-pre-wrap break-words max-h-96 overflow-y-auto pr-10">
+                    {getPrettifiedContent(response.content)}
+                  </pre>
+                  <HoverCopyButton
+                    value={getPrettifiedContent(response.content)}
+                    position="code-block"
+                  />
+                </div>
               ) : (
                 <div className="text-sm text-gray-600 dark:text-gray-400 italic break-words">
                   {response.content.text
@@ -112,7 +124,8 @@ export function ResponseTab({ request }: ResponseTabProps) {
                 <span className="text-emerald-600 dark:text-emerald-500 break-all">
                   {header.name}
                 </span>
-                <span className="text-gray-600 dark:text-gray-400 ml-2 break-all">
+                <span className="text-gray-600 dark:text-gray-400 break-all group">
+                  <HoverCopyButton value={header.value} />
                   {header.value}
                 </span>
               </div>

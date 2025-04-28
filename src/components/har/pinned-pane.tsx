@@ -7,6 +7,7 @@ import {
   DockviewApi,
   themeLightSpaced,
   themeAbyssSpaced,
+  AddPanelOptions,
 } from "dockview-react";
 import "dockview-react/dist/styles/dockview.css";
 import { useTheme } from "next-themes";
@@ -15,11 +16,9 @@ export function PinnedPane() {
   const [key, setKey] = useState(0); // Used to force re-render of dockview
   const dockviewApiRef = useRef<DockviewApi | null>(null);
 
-
   const { theme } = useTheme();
 
   const { pinnedRequests, togglePin } = useHar();
-
 
   // Update key whenever pinnedRequests changes to force dockview rebuild
   useEffect(() => {
@@ -66,7 +65,7 @@ export function PinnedPane() {
                 let previousPanelId: string | undefined;
 
                 pinnedRequests.forEach((request, index) => {
-                  const options: any = {
+                  const options: AddPanelOptions = {
                     id: request._custom?.id?.toString() ?? "-1",
                     component: "reqDetail",
                     title: request.request.url,

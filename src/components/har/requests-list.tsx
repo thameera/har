@@ -31,15 +31,15 @@ export const RequestsList = () => {
   return (
     <div className="h-full overflow-hidden">
       <div className="h-full overflow-y-auto">
-        <div className="space-y-1 p-2">
+        <div className="p-2">
           {requests.map((request, index) => (
             <div
               key={index}
-              className={`flex items-center gap-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer rounded transition-colors duration-150 ${
+              className={`flex items-center gap-2 p-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer rounded transition-colors duration-150 ${
                 selectedRequest === request
                   ? "bg-blue-100 dark:bg-blue-900/30"
                   : ""
-              }`}
+              } border border-black dark:border-gray-600 mb-1 rounded-md`}
               onClick={() => selectRequest(request)}
             >
               <div className="flex-1 min-w-0">
@@ -54,7 +54,7 @@ export const RequestsList = () => {
                         return (
                           <>
                             <span className="text-gray-600 dark:text-gray-400">
-                              {url.protocol}//
+                              {url.protocol + "//"}
                             </span>
                             <span className="font-medium text-blue-500 dark:text-blue-200">
                               {url.hostname}

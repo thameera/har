@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import { HarContextType, HarData, HarRequest } from "../types/harTypes";
+import { HarContextType, HarData, HarRequest } from "./harTypes";
 
 const HarContext = createContext<HarContextType | undefined>(undefined);
 

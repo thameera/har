@@ -4,7 +4,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { HarRequest } from "../types/harTypes";
+import { HarRequest } from "./harTypes";
+import { HoverCopyButton } from "./hover-copy-button";
 
 interface CookiesTabProps {
   request: HarRequest;
@@ -12,6 +13,10 @@ interface CookiesTabProps {
 
 export function CookiesTab({ request }: CookiesTabProps) {
   const { request: req, response } = request;
+
+  // Value container class for consistent styling
+  const valueContainerClass =
+    "text-gray-600 dark:text-gray-400 break-all group";
 
   return (
     <Accordion
@@ -32,7 +37,8 @@ export function CookiesTab({ request }: CookiesTabProps) {
                   <span className="text-emerald-600 dark:text-emerald-500 break-all">
                     {cookie.name}
                   </span>
-                  <span className="text-gray-600 dark:text-gray-400 ml-2 break-all">
+                  <span className={valueContainerClass}>
+                    <HoverCopyButton value={cookie.value} />
                     {cookie.value}
                   </span>
                 </div>
@@ -59,7 +65,8 @@ export function CookiesTab({ request }: CookiesTabProps) {
                   <span className="text-emerald-600 dark:text-emerald-500 break-all">
                     {cookie.name}
                   </span>
-                  <span className="text-gray-600 dark:text-gray-400 ml-2 break-all">
+                  <span className={valueContainerClass}>
+                    <HoverCopyButton value={cookie.value} />
                     {cookie.value}
                   </span>
                 </div>
