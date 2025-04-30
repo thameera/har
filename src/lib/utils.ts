@@ -1,6 +1,5 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { XMLParser } from "fast-xml-parser";
 import { HarRequest } from "@/components/har/harTypes";
 
 export function cn(...inputs: ClassValue[]) {
