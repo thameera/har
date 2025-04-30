@@ -65,10 +65,16 @@ export function PinnedPane() {
                 let previousPanelId: string | undefined;
 
                 pinnedRequests.forEach((request, index) => {
+                  const id = request._custom?.id ?? -1;
+                  const url = new URL(request.request.url);
+                  const path = url.pathname;
+                  const truncatedPath =
+                    path.length > 30 ? path.slice(0, 30) + "..." : path;
+
                   const options: AddPanelOptions = {
-                    id: request._custom?.id?.toString() ?? "-1",
+                    id: id.toString(),
                     component: "reqDetail",
-                    title: request.request.url,
+                    title: `${id + 1}. ${truncatedPath}`,
                     params: { request },
                   };
 
