@@ -78,10 +78,10 @@ export function PinnedPane() {
                     previousPanelId = panel.id;
                     panel.api.setActive();
                   } else {
-                    // For subsequent panels, position them as vertical splits
+                    // For subsequent panels, position them horizontally to the right
                     options.position = {
                       referencePanel: previousPanelId,
-                      direction: "below",
+                      direction: "right",
                     };
 
                     const panel = event.api.addPanel(options);
