@@ -41,6 +41,7 @@ export interface HarRequest {
     pinned?: boolean;
     id?: number;
     queryParams?: Array<{ name: string; value: string }>;
+    hashParams?: Array<{ name: string; value: string }>;
   };
 }
 

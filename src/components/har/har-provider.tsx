@@ -33,6 +33,20 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
               value: decodeURIComponent(value),
             }));
           }
+
+          // Extract hash fragments
+          const hash = url.hash.slice(1); // Remove the # symbol
+          if (hash) {
+            const hashParams = new URLSearchParams(hash);
+            if (hashParams.toString()) {
+              request._custom.hashParams = Array.from(hashParams.entries()).map(
+                ([key, value]) => ({
+                  name: decodeURIComponent(key),
+                  value: decodeURIComponent(value),
+                }),
+              );
+            }
+          }
         } catch (error) {
           console.error(`Error parsing URL for request ${index}:`, error);
           // Continue processing even if one URL fails to parse
