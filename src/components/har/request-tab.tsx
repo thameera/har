@@ -13,7 +13,6 @@ interface RequestTabProps {
 
 export function RequestTab({ request }: RequestTabProps) {
   const url = new URL(request.request.url);
-  const searchParams = new URLSearchParams(url.search);
   const hash = url.hash.slice(1); // Remove the # symbol
   const hashParams = new URLSearchParams(hash);
   const isPostRequest = request.request.method.toUpperCase() === "POST";
@@ -23,6 +22,9 @@ export function RequestTab({ request }: RequestTabProps) {
     request.request.postData.params.length > 0;
   const hasRawPostData =
     isPostRequest && request.request.postData?.text && !hasFormData;
+
+  const hasQueryParams =
+    request._custom?.queryParams && request._custom.queryParams.length > 0;
 
   // Value container class for consistent styling
   const valueContainerClass = "font-mono text-sm break-all group";
@@ -71,36 +73,26 @@ export function RequestTab({ request }: RequestTabProps) {
                 {url.pathname}
               </span>
             </div>
-            {searchParams.toString() && (
+            {hasQueryParams && (
               <div>
                 <h4 className="text-sm text-blue-600 dark:text-blue-500 mt-2 mb-1">
                   Query Parameters:
                 </h4>
                 <div className="space-y-1">
-                  {Array.from(searchParams.entries()).map(
-                    ([key, value], index) => (
-                      <div
-                        key={`${key}-${index}`}
-                        className="font-mono text-sm"
-                      >
-                        <span className="text-emerald-600 dark:text-emerald-500 break-all">
-                          {decodeURIComponent(key)}
-                        </span>
-                        <span className="text-gray-600 dark:text-gray-400 break-all group">
-                          <HoverCopyButton
-                            value={
-                              value.includes("[...redacted...]")
-                                ? value
-                                : decodeURIComponent(value)
-                            }
-                          />
-                          {value.includes("[...redacted...]")
-                            ? value
-                            : decodeURIComponent(value)}
-                        </span>
-                      </div>
-                    ),
-                  )}
+                  {request._custom!.queryParams!.map((param, index) => (
+                    <div
+                      key={`${param.name}-${index}`}
+                      className="font-mono text-sm"
+                    >
+                      <span className="text-emerald-600 dark:text-emerald-500 break-all">
+                        {param.name}
+                      </span>
+                      <span className="text-gray-600 dark:text-gray-400 break-all group">
+                        <HoverCopyButton value={param.value} />
+                        {param.value}
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </div>
             )}

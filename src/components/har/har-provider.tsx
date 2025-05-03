@@ -11,6 +11,7 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
   const [pinnedRequests, setPinnedRequests] = useState<HarRequest[]>([]);
 
   const setHarFile = (data: HarData) => {
+    console.log("setting har file");
     // Set the id for each request
     if (data?.log?.entries) {
       data.log.entries.forEach((request, index) => {
@@ -18,6 +19,27 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
           request._custom = {};
         }
         request._custom.id = index;
+
+        // Extract query params
+        try {
+          const url = new URL(request.request.url);
+          const searchParams = new URLSearchParams(url.search);
+
+          if (searchParams.toString()) {
+            request._custom.queryParams = Array.from(
+              searchParams.entries(),
+            ).map(([key, value]) => ({
+              name: decodeURIComponent(key),
+              value: decodeURIComponent(value),
+            }));
+          }
+        } catch (error) {
+          console.error(`Error parsing URL for request ${index}:`, error);
+          // Continue processing even if one URL fails to parse
+        }
+        if (request.request.url.includes("/authorize")) {
+          console.log(request);
+        }
       });
     }
 
