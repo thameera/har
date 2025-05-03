@@ -13,11 +13,6 @@ interface RequestTabProps {
 
 export function RequestTab({ request }: RequestTabProps) {
   const url = new URL(request.request.url);
-  const isPostRequest = request.request.method.toUpperCase() === "POST";
-  const hasRawPostData =
-    isPostRequest &&
-    request.request.postData?.text &&
-    (!request._custom?.formData || request._custom.formData.length === 0);
 
   const hasQueryParams =
     request._custom?.queryParams && request._custom.queryParams.length > 0;
@@ -25,6 +20,10 @@ export function RequestTab({ request }: RequestTabProps) {
     request._custom?.hashParams && request._custom.hashParams.length > 0;
   const hasFormData =
     request._custom?.formData && request._custom.formData.length > 0;
+  const hasRawPostData =
+    request.request.method.toUpperCase() === "POST" &&
+    request.request.postData?.text &&
+    !hasFormData;
 
   // Value container class for consistent styling
   const valueContainerClass = "font-mono text-sm break-all group";
