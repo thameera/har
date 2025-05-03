@@ -42,6 +42,7 @@ export interface HarRequest {
     id?: number;
     queryParams?: Array<{ name: string; value: string }>;
     hashParams?: Array<{ name: string; value: string }>;
+    formData?: Array<{ name: string; value: string }>;
   };
 }
 

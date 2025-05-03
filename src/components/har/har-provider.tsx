@@ -47,6 +47,21 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
               );
             }
           }
+
+          // Extract form data from POST requests
+          const isPostRequest = request.request.method.toUpperCase() === "POST";
+          if (
+            isPostRequest &&
+            request.request.postData?.params &&
+            request.request.postData.params.length > 0
+          ) {
+            request._custom.formData = request.request.postData.params.map(
+              (param) => ({
+                name: decodeURIComponent(param.name),
+                value: decodeURIComponent(param.value),
+              }),
+            );
+          }
         } catch (error) {
           console.error(`Error parsing URL for request ${index}:`, error);
           // Continue processing even if one URL fails to parse

@@ -14,17 +14,17 @@ interface RequestTabProps {
 export function RequestTab({ request }: RequestTabProps) {
   const url = new URL(request.request.url);
   const isPostRequest = request.request.method.toUpperCase() === "POST";
-  const hasFormData =
-    isPostRequest &&
-    request.request.postData?.params &&
-    request.request.postData.params.length > 0;
   const hasRawPostData =
-    isPostRequest && request.request.postData?.text && !hasFormData;
+    isPostRequest &&
+    request.request.postData?.text &&
+    (!request._custom?.formData || request._custom.formData.length === 0);
 
   const hasQueryParams =
     request._custom?.queryParams && request._custom.queryParams.length > 0;
   const hasHashParams =
     request._custom?.hashParams && request._custom.hashParams.length > 0;
+  const hasFormData =
+    request._custom?.formData && request._custom.formData.length > 0;
 
   // Value container class for consistent styling
   const valueContainerClass = "font-mono text-sm break-all group";
@@ -128,17 +128,17 @@ export function RequestTab({ request }: RequestTabProps) {
           <AccordionTrigger>Form Data</AccordionTrigger>
           <AccordionContent>
             <div className="space-y-1">
-              {request.request.postData?.params?.map((param, index) => (
+              {request._custom!.formData!.map((param, index) => (
                 <div
                   key={`${param.name}-${index}`}
                   className="font-mono text-sm"
                 >
                   <span className="text-emerald-600 dark:text-emerald-500 break-all">
-                    {decodeURIComponent(param.name)}
+                    {param.name}
                   </span>
                   <span className="text-gray-600 dark:text-gray-400 break-all group">
-                    <HoverCopyButton value={decodeURIComponent(param.value)} />
-                    {decodeURIComponent(param.value)}
+                    <HoverCopyButton value={param.value} />
+                    {param.value}
                   </span>
                 </div>
               ))}
