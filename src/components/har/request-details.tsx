@@ -11,7 +11,6 @@ interface RequestDetailsProps {
 }
 
 export function RequestDetails({ request }: RequestDetailsProps) {
-  const { method, url } = request.request;
   const { status } = request.response;
 
   return (
@@ -20,7 +19,7 @@ export function RequestDetails({ request }: RequestDetailsProps) {
         <div className="mb-2 text-sm text-gray-900 dark:text-gray-100">
           {request.startedDateTime.replace("T", " ")}
         </div>
-        <RequestDetailURL method={method} url={url} />
+        <RequestDetailURL request={request} />
         <RequestDetailStatus status={status} />
 
         <div className="mt-6">
