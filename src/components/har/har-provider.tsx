@@ -66,9 +66,6 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
           console.error(`Error parsing URL for request ${index}:`, error);
           // Continue processing even if one URL fails to parse
         }
-        if (request.request.url.includes("/authorize")) {
-          console.log(request);
-        }
       });
     }
 
