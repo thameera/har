@@ -85,7 +85,7 @@ export const RequestsList = () => {
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  togglePin(request._custom?.id ?? -1);
+                  togglePin(request._custom!.id);
                 }}
                 className={`p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors icon-button ${
                   isPinned(request)

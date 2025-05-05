@@ -65,7 +65,7 @@ export function PinnedPane() {
                 let previousPanelId: string | undefined;
 
                 pinnedRequests.forEach((request, index) => {
-                  const id = request._custom?.id ?? -1;
+                  const id = request._custom!.id;
                   const url = new URL(request.request.url);
                   const path = url.pathname;
                   const truncatedPath =

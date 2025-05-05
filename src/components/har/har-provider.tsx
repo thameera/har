@@ -12,13 +12,12 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
 
   const setHarFile = (data: HarData) => {
     console.log("setting har file");
-    // Set the id for each request
     if (data?.log?.entries) {
       data.log.entries.forEach((request, index) => {
-        if (!request._custom) {
-          request._custom = {};
-        }
-        request._custom.id = index;
+        // Initialize the custom data object
+        request._custom = {
+          id: index,
+        };
 
         // Extract query params
         try {

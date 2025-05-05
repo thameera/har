@@ -38,7 +38,7 @@ export interface HarRequest {
     receive: number;
   };
   _custom?: {
-    id?: number;
+    id: number;
     pinned?: boolean;
     queryParams?: Array<{ name: string; value: string; isSaml?: boolean }>;
     hashParams?: Array<{ name: string; value: string }>;
