@@ -38,11 +38,12 @@ export interface HarRequest {
     receive: number;
   };
   _custom?: {
-    pinned?: boolean;
     id?: number;
-    queryParams?: Array<{ name: string; value: string }>;
+    pinned?: boolean;
+    queryParams?: Array<{ name: string; value: string; isSaml?: boolean }>;
     hashParams?: Array<{ name: string; value: string }>;
-    formData?: Array<{ name: string; value: string }>;
+    formData?: Array<{ name: string; value: string; isSaml?: boolean }>;
+    samlList?: Array<{ name: string; value: string }>;
   };
 }
 
