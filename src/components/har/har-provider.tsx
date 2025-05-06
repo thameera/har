@@ -100,6 +100,17 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
             },
           );
         }
+        //testing for jwt tokens in content in response
+        //there may be some response content that is a html doc and we don't want that
+        if (
+          request.response.content.text &&
+          !request.response.content.text.includes("!DOCTYPE")
+        ) {
+          const json = JSON.parse(request.response.content.text) as JSON;
+          for (const [key, val] of Object.entries(json)) {
+            console.log(key, val);
+          }
+        }
       } catch (error) {
         console.error(`Error parsing URL for request ${index}:`, error);
         // Continue processing even if one URL fails to parse
