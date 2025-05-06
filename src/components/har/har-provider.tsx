@@ -16,8 +16,8 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
       // Initialize the custom data object
       request._custom = {
         id: index,
+        samlList: [],
       };
-      request._custom.samlList = new Array<{ name: string; value: string }>();
 
       // Extract query params
       try {
@@ -27,24 +27,25 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
         if (searchParams.toString()) {
           request._custom.queryParams = Array.from(searchParams.entries()).map(
             ([key, value]) => {
+              const queryObj = {
+                name: decodeURIComponent(key),
+                value: decodeURIComponent(value),
+              } as { name: string; value: string; isSaml?: boolean };
+
               //check if query params is a SAML request or response
               if (key === "SAMLResponse" || key === "SAMLRequest") {
                 //add to samlList for the current request
-                request._custom?.samlList?.push({
-                  name: decodeURIComponent(key),
-                  value: decodeURIComponent(value),
-                });
+
+                request._custom?.samlList?.push(queryObj);
 
                 return {
-                  name: decodeURIComponent(key),
-                  value: decodeURIComponent(value),
+                  ...queryObj,
                   isSaml: true,
                 };
               }
 
               return {
-                name: decodeURIComponent(key),
-                value: decodeURIComponent(value),
+                ...queryObj,
                 isSaml: false,
               };
             },
@@ -74,32 +75,31 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
         ) {
           request._custom.formData = request.request.postData.params.map(
             (param) => {
+              const paramObj = {
+                name: decodeURIComponent(param.name),
+                value: decodeURIComponent(param.value),
+              } as { name: string; value: string; isSaml?: boolean };
+
               //check if formdata params is a SAML request or response
               if (
                 param.name === "SAMLResponse" ||
                 param.name === "SAMLRequest"
               ) {
                 //add to samlList for the current request
-                request._custom?.samlList?.push({
-                  name: decodeURIComponent(param.name),
-                  value: decodeURIComponent(param.value),
-                });
+                request._custom?.samlList?.push(paramObj);
 
                 return {
-                  name: decodeURIComponent(param.name),
-                  value: decodeURIComponent(param.value),
+                  ...paramObj,
                   isSaml: true,
                 };
               }
               return {
-                name: decodeURIComponent(param.name),
-                value: decodeURIComponent(param.value),
+                ...paramObj,
                 isSaml: false,
               };
             },
           );
         }
-        console.log("samlList", request._custom.samlList);
       } catch (error) {
         console.error(`Error parsing URL for request ${index}:`, error);
         // Continue processing even if one URL fails to parse
