@@ -85,14 +85,16 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
           ];
         }
         //testing for jwt tokens in content in response
-        //there may be some response content that is a html doc and we don't want that
         if (
-          request.response.content.text &&
-          !request.response.content.text.includes("!DOCTYPE")
+          request.response.content.mimeType === "application/json" &&
+          request.response.content.text
         ) {
-          const json = JSON.parse(request.response.content.text) as JSON;
-          for (const [key, val] of Object.entries(json)) {
-            console.log(key, val);
+          const jsonPayload = JSON.parse(request.response.content.text) as JSON;
+
+          for (const [key, value] of Object.entries(jsonPayload)) {
+            if (typeof value === "string" && value.split(".").length === 3) {
+              console.log("is jwt", value);
+            }
           }
         }
       } catch (error) {
