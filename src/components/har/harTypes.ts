@@ -44,6 +44,7 @@ export interface HarRequest {
     hashParams?: Array<{ name: string; value: string }>;
     formData?: Array<{ name: string; value: string; isSaml?: boolean }>;
     samlList?: Array<{ name: string; value: string }>;
+    jwtList?: Array<{ name: string; value: string }>;
   };
 }
 
