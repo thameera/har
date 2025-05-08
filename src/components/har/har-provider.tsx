@@ -93,7 +93,11 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
           const jsonPayload = JSON.parse(request.response.content.text) as JSON;
 
           for (const [key, value] of Object.entries(jsonPayload)) {
-            if (typeof value === "string" && value.split(".").length === 3) {
+            if (
+              typeof value === "string" &&
+              value.split(".").length === 3 &&
+              value.startsWith("eyJ")
+            ) {
               request._custom?.jwtList?.push({
                 name: key,
                 value,
