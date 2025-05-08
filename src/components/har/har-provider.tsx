@@ -17,6 +17,8 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
 
   const setHarFile = (data: HarData) => {
     console.log("setting har file");
+    const SAML_KEYS = new Set(["SAMLResponse", "SAMLRequest"]);
+
     data.log.entries.forEach((request, index) => {
       // Initialize the custom data object
       request._custom = {
@@ -32,27 +34,19 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
         if (searchParams.toString()) {
           request._custom.queryParams = Array.from(searchParams.entries()).map(
             ([key, value]) => {
+              const isSaml = SAML_KEYS.has(key);
+
               const queryObj: NameValueParam = {
                 name: decodeURIComponent(key),
                 value: decodeURIComponent(value),
+                isSaml,
               };
 
-              //check if query params is a SAML request or response
-              if (key === "SAMLResponse" || key === "SAMLRequest") {
-                //add to samlList for the current request
-
+              if (isSaml) {
                 request._custom?.samlList?.push(queryObj);
-
-                return {
-                  ...queryObj,
-                  isSaml: true,
-                };
               }
 
-              return {
-                ...queryObj,
-                isSaml: false,
-              };
+              return queryObj;
             },
           );
         }
@@ -73,35 +67,27 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
 
         // Extract form data from POST requests
         const isPostRequest = request.request.method.toUpperCase() === "POST";
-        if (
+        const hasFormData =
           isPostRequest &&
           request.request.postData?.params &&
-          request.request.postData.params.length > 0
-        ) {
-          request._custom.formData = request.request.postData.params.map(
+          request.request.postData.params.length > 0;
+
+        if (hasFormData) {
+          request._custom.formData = request.request.postData!.params!.map(
             (param) => {
+              const isSaml = SAML_KEYS.has(param.name);
+
               const paramObj: NameValueParam = {
                 name: decodeURIComponent(param.name),
                 value: decodeURIComponent(param.value),
+                isSaml,
               };
 
-              //check if formdata params is a SAML request or response
-              if (
-                param.name === "SAMLResponse" ||
-                param.name === "SAMLRequest"
-              ) {
-                //add to samlList for the current request
+              if (isSaml) {
                 request._custom?.samlList?.push(paramObj);
-
-                return {
-                  ...paramObj,
-                  isSaml: true,
-                };
               }
-              return {
-                ...paramObj,
-                isSaml: false,
-              };
+
+              return paramObj;
             },
           );
         }
