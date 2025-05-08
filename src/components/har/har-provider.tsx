@@ -32,22 +32,17 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
         const searchParams = new URLSearchParams(url.search);
 
         if (searchParams.toString()) {
-          request._custom.queryParams = Array.from(searchParams.entries()).map(
-            ([key, value]) => {
-              const isSaml = SAML_KEYS.has(key);
+          const queryParams = Array.from(searchParams.entries()).map(
+            ([key, value]) => ({
+              name: decodeURIComponent(key),
+              value: decodeURIComponent(value),
+              isSaml: SAML_KEYS.has(key),
+            }),
+          );
 
-              const queryObj: NameValueParam = {
-                name: decodeURIComponent(key),
-                value: decodeURIComponent(value),
-                isSaml,
-              };
-
-              if (isSaml) {
-                request._custom?.samlList?.push(queryObj);
-              }
-
-              return queryObj;
-            },
+          request._custom.queryParams = queryParams;
+          request._custom.samlList = queryParams.filter(
+            (param) => param.isSaml,
           );
         }
 
@@ -73,23 +68,21 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
           request.request.postData.params.length > 0;
 
         if (hasFormData) {
-          request._custom.formData = request.request.postData!.params!.map(
-            (param) => {
-              const isSaml = SAML_KEYS.has(param.name);
-
-              const paramObj: NameValueParam = {
-                name: decodeURIComponent(param.name),
-                value: decodeURIComponent(param.value),
-                isSaml,
-              };
-
-              if (isSaml) {
-                request._custom?.samlList?.push(paramObj);
-              }
-
-              return paramObj;
-            },
+          const formData = request.request.postData!.params!.map(
+            (param): NameValueParam => ({
+              name: decodeURIComponent(param.name),
+              value: decodeURIComponent(param.value),
+              isSaml: SAML_KEYS.has(param.name),
+            }),
           );
+
+          request._custom.formData = formData;
+
+          const samlFormData = formData.filter((param) => param.isSaml);
+          request._custom.samlList = [
+            ...request._custom.samlList,
+            ...samlFormData,
+          ];
         }
       } catch (error) {
         console.error(`Error parsing URL for request ${index}:`, error);

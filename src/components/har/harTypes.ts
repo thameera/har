@@ -43,7 +43,7 @@ export interface HarRequest {
     queryParams?: Array<NameValueParam>;
     hashParams?: Array<NameValueParam>;
     formData?: Array<NameValueParam>;
-    samlList?: Array<NameValueParam>;
+    samlList: Array<NameValueParam>;
   };
 }
 
