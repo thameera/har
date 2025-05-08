@@ -14,9 +14,6 @@ interface ResponseTabProps {
 export function ResponseTab({ request }: ResponseTabProps) {
   const { response } = request;
 
-  // Value container class for consistent styling
-  const valueContainerClass = "font-mono text-sm break-all group";
-
   // Determine if content can be displayed as text
   const canDisplayAsText = (content: { mimeType: string; text?: string }) => {
     if (!content.text) return false;

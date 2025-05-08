@@ -33,13 +33,6 @@ export function HoverCopyButton({
       ? "absolute top-2 right-2 bg-background/80 backdrop-blur-sm shadow-sm rounded-sm z-10"
       : "inline-flex align-bottom";
 
-  const sizeClasses =
-    size === "sm"
-      ? "!h-3 !w-3 !min-h-0 !min-w-0"
-      : "!h-4 !w-4 !min-h-0 !min-w-0";
-
-  const iconSize = size === "sm" ? "!h-2 !w-2" : "!h-2.5 !w-2.5";
-
   return (
     <Button
       variant="ghost"

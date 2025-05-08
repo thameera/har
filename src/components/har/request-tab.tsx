@@ -25,9 +25,6 @@ export function RequestTab({ request }: RequestTabProps) {
     request.request.postData?.text &&
     !hasFormData;
 
-  // Value container class for consistent styling
-  const valueContainerClass = "font-mono text-sm break-all group";
-
   return (
     <Accordion
       type="multiple"
