@@ -121,6 +121,24 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
 
           request._custom.jwtList = [...request._custom.jwtList, ...findJwt];
         }
+        //testing for jwt tokens in content in response
+        if (
+          request.response.content.mimeType === "application/json" &&
+          request.response.content.text
+        ) {
+          const jsonPayload = JSON.parse(request.response.content.text) as JSON;
+
+          for (const [key, value] of Object.entries(jsonPayload)) {
+            if (typeof value === "string" && value.split(".").length === 3) {
+              request._custom?.jwtList?.push({
+                name: key,
+                value,
+              });
+            }
+          }
+        }
+
+        console.log(request._custom.jwtList);
       } catch (error) {
         console.error(`Error parsing URL for request ${index}:`, error);
         // Continue processing even if one URL fails to parse
