@@ -18,6 +18,7 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
   const setHarFile = (data: HarData) => {
     console.log("setting har file");
     const SAML_KEYS = new Set(["SAMLResponse", "SAMLRequest"]);
+    const JWT_LENGTH = 3;
 
     data.log.entries.forEach((request, index) => {
       // Initialize the custom data object
@@ -87,26 +88,39 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
         }
         //testing for jwt tokens in content in response
         if (
-          request.response.content.mimeType === "application/json" &&
+          request.response.content.mimeType.startsWith("application/json") &&
           request.response.content.text
         ) {
-          const jsonPayload = JSON.parse(request.response.content.text) as JSON;
+          let jsonPayload: Record<string, any> = {};
 
-          for (const [key, value] of Object.entries(jsonPayload)) {
-            if (
-              typeof value === "string" &&
-              value.split(".").length === 3 &&
-              value.startsWith("eyJ")
-            ) {
-              request._custom?.jwtList?.push({
-                name: key,
-                value,
-              });
-            }
+          try {
+            jsonPayload = JSON.parse(request.response.content.text);
+          } catch (err) {
+            console.log(`Error parsing JSON for request ${index}:`, err);
           }
-        }
 
-        console.log(request._custom.jwtList);
+          const findJwt = ["access_token", "id_token"].flatMap((name) => {
+            const token = jsonPayload[name];
+
+            if (
+              token &&
+              typeof token === "string" &&
+              token.startsWith("eyJ") &&
+              token.split(".").length === JWT_LENGTH
+            ) {
+              return [
+                {
+                  name,
+                  value: token,
+                },
+              ];
+            }
+
+            return [];
+          });
+
+          request._custom.jwtList = [...request._custom.jwtList, ...findJwt];
+        }
       } catch (error) {
         console.error(`Error parsing URL for request ${index}:`, error);
         // Continue processing even if one URL fails to parse
