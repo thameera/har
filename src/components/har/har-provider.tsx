@@ -16,6 +16,7 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
       // Initialize the custom data object
       request._custom = {
         id: index,
+        samlList: [],
       };
 
       // Extract query params
@@ -25,10 +26,29 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
 
         if (searchParams.toString()) {
           request._custom.queryParams = Array.from(searchParams.entries()).map(
-            ([key, value]) => ({
-              name: decodeURIComponent(key),
-              value: decodeURIComponent(value),
-            }),
+            ([key, value]) => {
+              const queryObj = {
+                name: decodeURIComponent(key),
+                value: decodeURIComponent(value),
+              } as { name: string; value: string; isSaml?: boolean };
+
+              //check if query params is a SAML request or response
+              if (key === "SAMLResponse" || key === "SAMLRequest") {
+                //add to samlList for the current request
+
+                request._custom?.samlList?.push(queryObj);
+
+                return {
+                  ...queryObj,
+                  isSaml: true,
+                };
+              }
+
+              return {
+                ...queryObj,
+                isSaml: false,
+              };
+            },
           );
         }
 
@@ -54,10 +74,30 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
           request.request.postData.params.length > 0
         ) {
           request._custom.formData = request.request.postData.params.map(
-            (param) => ({
-              name: decodeURIComponent(param.name),
-              value: decodeURIComponent(param.value),
-            }),
+            (param) => {
+              const paramObj = {
+                name: decodeURIComponent(param.name),
+                value: decodeURIComponent(param.value),
+              } as { name: string; value: string; isSaml?: boolean };
+
+              //check if formdata params is a SAML request or response
+              if (
+                param.name === "SAMLResponse" ||
+                param.name === "SAMLRequest"
+              ) {
+                //add to samlList for the current request
+                request._custom?.samlList?.push(paramObj);
+
+                return {
+                  ...paramObj,
+                  isSaml: true,
+                };
+              }
+              return {
+                ...paramObj,
+                isSaml: false,
+              };
+            },
           );
         }
       } catch (error) {
