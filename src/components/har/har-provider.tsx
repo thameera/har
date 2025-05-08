@@ -1,5 +1,10 @@
 import { createContext, useContext, useState } from "react";
-import { HarContextType, HarData, HarRequest } from "./harTypes";
+import {
+  HarContextType,
+  HarData,
+  HarRequest,
+  NameValueParam,
+} from "./harTypes";
 
 const HarContext = createContext<HarContextType | undefined>(undefined);
 
@@ -27,10 +32,10 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
         if (searchParams.toString()) {
           request._custom.queryParams = Array.from(searchParams.entries()).map(
             ([key, value]) => {
-              const queryObj = {
+              const queryObj: NameValueParam = {
                 name: decodeURIComponent(key),
                 value: decodeURIComponent(value),
-              } as { name: string; value: string; isSaml?: boolean };
+              };
 
               //check if query params is a SAML request or response
               if (key === "SAMLResponse" || key === "SAMLRequest") {
@@ -58,7 +63,7 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
           const hashParams = new URLSearchParams(hash);
           if (hashParams.toString()) {
             request._custom.hashParams = Array.from(hashParams.entries()).map(
-              ([key, value]) => ({
+              ([key, value]): NameValueParam => ({
                 name: decodeURIComponent(key),
                 value: decodeURIComponent(value),
               }),
@@ -75,10 +80,10 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
         ) {
           request._custom.formData = request.request.postData.params.map(
             (param) => {
-              const paramObj = {
+              const paramObj: NameValueParam = {
                 name: decodeURIComponent(param.name),
                 value: decodeURIComponent(param.value),
-              } as { name: string; value: string; isSaml?: boolean };
+              };
 
               //check if formdata params is a SAML request or response
               if (

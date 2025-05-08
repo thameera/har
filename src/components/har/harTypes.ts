@@ -40,11 +40,17 @@ export interface HarRequest {
   _custom?: {
     id: number;
     pinned?: boolean;
-    queryParams?: Array<{ name: string; value: string; isSaml?: boolean }>;
-    hashParams?: Array<{ name: string; value: string }>;
-    formData?: Array<{ name: string; value: string; isSaml?: boolean }>;
-    samlList?: Array<{ name: string; value: string }>;
+    queryParams?: Array<NameValueParam>;
+    hashParams?: Array<NameValueParam>;
+    formData?: Array<NameValueParam>;
+    samlList?: Array<NameValueParam>;
   };
+}
+
+export interface NameValueParam {
+  name: string;
+  value: string;
+  isSaml?: boolean;
 }
 
 export interface HarLog {
