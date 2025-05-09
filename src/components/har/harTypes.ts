@@ -52,6 +52,7 @@ export interface NameValueParam {
   name: string;
   value: string;
   isSaml?: boolean;
+  isJwt?: boolean;
 }
 
 export interface HarLog {
