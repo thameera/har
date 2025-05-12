@@ -18,12 +18,24 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
   const setHarFile = (data: HarData) => {
     console.log("setting har file");
     const SAML_KEYS = new Set(["SAMLResponse", "SAMLRequest"]);
+    const TOKEN_KEYS = new Set(["access_token", "id_token"]);
+    const JWT_LENGTH = 3;
 
     data.log.entries.forEach((request, index) => {
       // Initialize the custom data object
       request._custom = {
         id: index,
         samlList: [],
+        jwtList: [],
+      };
+
+      const jwtFormatCheck = (token: any): boolean => {
+        return (
+          token &&
+          typeof token === "string" &&
+          token.startsWith("eyJ") &&
+          token.split(".").length === JWT_LENGTH
+        );
       };
 
       // Extract query params
@@ -55,8 +67,17 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
               ([key, value]): NameValueParam => ({
                 name: decodeURIComponent(key),
                 value: decodeURIComponent(value),
+                isJwt: TOKEN_KEYS.has(key) && jwtFormatCheck(value),
               }),
             );
+            const jwtHashParam = request._custom.hashParams.filter(
+              (param) => param.isJwt,
+            );
+
+            request._custom.jwtList = [
+              ...request._custom.jwtList,
+              ...jwtHashParam,
+            ];
           }
         }
 
@@ -73,6 +94,7 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
               name: decodeURIComponent(param.name),
               value: decodeURIComponent(param.value),
               isSaml: SAML_KEYS.has(param.name),
+              isJwt: TOKEN_KEYS.has(param.name) && jwtFormatCheck(param.value),
             }),
           );
 
@@ -83,6 +105,34 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
             ...request._custom.samlList,
             ...samlFormData,
           ];
+
+          const jwtFormData = formData.filter((param) => param.isJwt);
+          request._custom.jwtList = [
+            ...request._custom.jwtList,
+            ...jwtFormData,
+          ];
+        }
+
+        //testing for jwt tokens in content in response
+        if (
+          request.response.content.mimeType.startsWith("application/json") &&
+          request.response.content.text
+        ) {
+          let jsonPayload: Record<string, any> = {};
+
+          try {
+            jsonPayload = JSON.parse(request.response.content.text);
+          } catch (err) {
+            console.log(`Error parsing JSON for request ${index}:`, err);
+          }
+
+          const findJwt = Array.from(TOKEN_KEYS).flatMap((name) => {
+            const token = jsonPayload[name];
+
+            return jwtFormatCheck(token) ? [{ name, value: token }] : [];
+          });
+
+          request._custom.jwtList = [...request._custom.jwtList, ...findJwt];
         }
       } catch (error) {
         console.error(`Error parsing URL for request ${index}:`, error);
