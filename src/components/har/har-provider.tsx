@@ -21,9 +21,9 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
     const JWT_KEYS = new Set(["access_token", "id_token"]);
     const JWT_LENGTH = 3;
 
-    const jwtFormatCheck = (token: any): boolean => {
+    const jwtFormatCheck = (token: unknown): boolean => {
       return (
-        token &&
+        Boolean(token) &&
         typeof token === "string" &&
         token.startsWith("eyJ") &&
         token.split(".").length === JWT_LENGTH
@@ -113,7 +113,7 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
           request.response.content.mimeType.startsWith("application/json") &&
           request.response.content.text
         ) {
-          let jsonPayload: Record<string, any> = {};
+          let jsonPayload: Record<string, unknown> = {};
 
           try {
             jsonPayload = JSON.parse(request.response.content.text);
@@ -124,7 +124,9 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
           const findJwt = Array.from(JWT_KEYS).flatMap((name) => {
             const token = jsonPayload[name];
 
-            return jwtFormatCheck(token) ? [{ name, value: token }] : [];
+            return jwtFormatCheck(token)
+              ? [{ name, value: token as string }]
+              : [];
           });
 
           request._custom.jwtList = [...request._custom.jwtList, ...findJwt];
