@@ -21,7 +21,7 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
     const JWT_KEYS = new Set(["access_token", "id_token"]);
     const JWT_LENGTH = 3;
 
-    const jwtFormatCheck = (token: unknown): boolean => {
+    const hasJwtStructure = (token: unknown): boolean => {
       return (
         Boolean(token) &&
         typeof token === "string" &&
@@ -67,7 +67,7 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
               ([key, value]): NameValueParam => ({
                 name: decodeURIComponent(key),
                 value: decodeURIComponent(value),
-                isJwt: JWT_KEYS.has(key) && jwtFormatCheck(value),
+                isJwt: JWT_KEYS.has(key) && hasJwtStructure(value),
               }),
             );
             request._custom.jwtList = request._custom.hashParams.filter(
@@ -89,7 +89,7 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
               name: decodeURIComponent(param.name),
               value: decodeURIComponent(param.value),
               isSaml: SAML_KEYS.has(param.name),
-              isJwt: JWT_KEYS.has(param.name) && jwtFormatCheck(param.value),
+              isJwt: JWT_KEYS.has(param.name) && hasJwtStructure(param.value),
             }),
           );
 
@@ -121,15 +121,15 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
             console.log(`Error parsing JSON for request ${index}:`, err);
           }
 
-          const findJwt = Array.from(JWT_KEYS).flatMap((name) => {
+          const jwts = Array.from(JWT_KEYS).flatMap((name) => {
             const token = jsonPayload[name];
 
-            return jwtFormatCheck(token)
+            return hasJwtStructure(token)
               ? [{ name, value: token as string }]
               : [];
           });
 
-          request._custom.jwtList = [...request._custom.jwtList, ...findJwt];
+          request._custom.jwtList = [...request._custom.jwtList, ...jwts];
         }
       } catch (error) {
         console.error(`Error parsing URL for request ${index}:`, error);
