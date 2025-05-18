@@ -53,8 +53,8 @@ export const RequestsList = ({ view }: RequestsListProps) => {
                   </span>
                   <span className="text-sm truncate text-gray-900 dark:text-gray-100">
                     {(() => {
-                      try {
-                        const url = new URL(request.request.url);
+                      if (request._custom && request._custom.urlObj) {
+                        const url = request._custom.urlObj;
                         return (
                           <>
                             <span className="text-gray-600 dark:text-gray-400">
@@ -69,7 +69,8 @@ export const RequestsList = ({ view }: RequestsListProps) => {
                             </span>
                           </>
                         );
-                      } catch {
+                      } else {
+                        // Fallback to original URL if urlObj is null
                         return request.request.url;
                       }
                     })()}

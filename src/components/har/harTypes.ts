@@ -45,6 +45,8 @@ export interface HarRequest {
     formData?: Array<NameValueParam>;
     samlList: Array<NameValueParam>;
     jwtList: Array<NameValueParam>;
+    urlObj: URL | null;
+    domain: string;
   };
 }
 

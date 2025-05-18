@@ -71,10 +71,19 @@ export function PinnedPane({ view }: PinnedPaneProps) {
 
                 pinnedRequests.forEach((request, index) => {
                   const id = request._custom!.id;
-                  const url = new URL(request.request.url);
-                  const path = url.pathname;
-                  const truncatedPath =
-                    path.length > 30 ? path.slice(0, 30) + "..." : path;
+
+                  // Use pre-parsed URL if available
+                  let path = "";
+                  let truncatedPath = "";
+
+                  if (request._custom && request._custom.urlObj) {
+                    path = request._custom.urlObj.pathname;
+                    truncatedPath =
+                      path.length > 30 ? path.slice(0, 30) + "..." : path;
+                  } else {
+                    // Fallback if URL parsing failed
+                    truncatedPath = "Unknown path";
+                  }
 
                   const options: AddPanelOptions = {
                     id: id.toString(),

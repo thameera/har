@@ -21,11 +21,9 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
   const extractDomains = (entries: HarRequest[]) => {
     const domains = new Set<string>();
     entries.forEach((entry) => {
-      try {
-        const url = new URL(entry.request.url);
-        domains.add(url.hostname);
-      } catch (error) {
-        console.error("Error extracting domain:", error);
+      // Only add non-empty domains
+      if (entry._custom && entry._custom.domain) {
+        domains.add(entry._custom.domain);
       }
     });
     return Array.from(domains).sort();
@@ -52,12 +50,17 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
         id: index,
         samlList: [],
         jwtList: [],
+        urlObj: null,
+        domain: "",
       };
 
-      // Extract query params
       try {
-        const url = new URL(request.request.url);
-        const searchParams = new URLSearchParams(url.search);
+        const urlObj = new URL(request.request.url);
+        request._custom.urlObj = urlObj;
+        request._custom.domain = urlObj.hostname;
+
+        // Extract query params
+        const searchParams = urlObj.searchParams;
 
         if (searchParams.toString()) {
           const queryParams = Array.from(searchParams.entries()).map(
@@ -75,7 +78,7 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
         }
 
         // Extract hash fragments
-        const hash = url.hash.slice(1); // Remove the # symbol
+        const hash = urlObj.hash.slice(1); // Remove the # symbol
         if (hash) {
           const hashParams = new URLSearchParams(hash);
           if (hashParams.toString()) {
@@ -183,12 +186,11 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
     // Filter by domain if domains are selected
     if (selectedDomains.length > 0) {
       requests = requests.filter((req) => {
-        try {
-          const url = new URL(req.request.url);
-          return selectedDomains.includes(url.hostname);
-        } catch (error) {
-          return false;
-        }
+        return (
+          req._custom &&
+          req._custom.domain &&
+          selectedDomains.includes(req._custom.domain)
+        );
       });
     }
 
