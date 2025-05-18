@@ -8,7 +8,11 @@ import { DetailsPane } from "./details-pane";
 import { PinnedPane } from "./pinned-pane";
 import { Toolbar } from "./toolbar";
 
-function PanelsContainer() {
+interface PanelsContainerProps {
+  view: string;
+}
+
+function PanelsContainer({ view }: PanelsContainerProps) {
   return (
     <PanelGroup direction="horizontal" className="flex-1">
       <Panel
@@ -17,7 +21,7 @@ function PanelsContainer() {
         maxSize={80}
         className="bg-muted/50 p-4"
       >
-        <RequestsList />
+        <RequestsList view={view} />
       </Panel>
       <PanelResizeHandle className="w-1 bg-border" />
       <Panel
@@ -53,10 +57,10 @@ export default function HarView() {
 
           {/* Render content based on current view */}
           {currentView === "all" ? (
-            <PanelsContainer />
+            <PanelsContainer view={currentView} />
           ) : (
             <div className="flex-1 bg-muted/50 p-4">
-              <PinnedPane />
+              <PinnedPane view={currentView} />
             </div>
           )}
         </div>

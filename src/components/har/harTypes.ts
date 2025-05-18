@@ -72,9 +72,14 @@ export interface HarContextType {
   harData: HarData | null;
   setHarFile: (data: HarData) => void;
   getAllRequests: () => HarRequest[];
+  getFilteredRequests: (viewMode: string) => HarRequest[];
   selectedRequest: HarRequest | null;
   selectRequest: (request: HarRequest | null) => void;
   togglePin: (id: number) => void;
   isPinned: (request: HarRequest) => boolean;
   pinnedRequests: HarRequest[];
+  availableDomains: string[];
+  selectedDomains: string[];
+  toggleDomain: (domain: string) => void;
+  clearDomainSelection: () => void;
 }

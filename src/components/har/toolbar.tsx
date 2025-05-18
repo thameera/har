@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { cn } from "@/lib/utils";
 import { useHar } from "./har-provider";
+import { DomainFilter } from "./domain-filter";
 
 interface ToolbarProps {
   onViewChange?: (view: string) => void;
@@ -20,8 +21,8 @@ export function Toolbar({ onViewChange }: ToolbarProps) {
   }, [view, onViewChange]);
 
   return (
-    <div className="bg-muted/70 p-2 border-b border-border flex items-center">
-      <div className="mr-4">
+    <div className="bg-muted/70 p-2 border-b border-border flex items-center justify-between">
+      <div className="flex items-center gap-4">
         <ToggleGroup
           type="single"
           value={view}
@@ -55,6 +56,8 @@ export function Toolbar({ onViewChange }: ToolbarProps) {
             )}
           </ToggleGroupItem>
         </ToggleGroup>
+
+        <DomainFilter />
       </div>
     </div>
   );

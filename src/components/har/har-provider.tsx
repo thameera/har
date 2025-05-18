@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useMemo } from "react";
 import {
   HarContextType,
   HarData,
@@ -14,6 +14,22 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
     null,
   );
   const [pinnedRequests, setPinnedRequests] = useState<HarRequest[]>([]);
+  const [availableDomains, setAvailableDomains] = useState<string[]>([]);
+  const [selectedDomains, setSelectedDomains] = useState<string[]>([]);
+
+  // Extract domains to build availableDomains set
+  const extractDomains = (entries: HarRequest[]) => {
+    const domains = new Set<string>();
+    entries.forEach((entry) => {
+      try {
+        const url = new URL(entry.request.url);
+        domains.add(url.hostname);
+      } catch (error) {
+        console.error("Error extracting domain:", error);
+      }
+    });
+    return Array.from(domains).sort();
+  };
 
   const setHarFile = (data: HarData) => {
     console.log("setting har file");
@@ -138,6 +154,13 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
     });
 
     setHarData(data);
+
+    // Extract and set available domains
+    const domains = extractDomains(data.log.entries);
+    setAvailableDomains(domains);
+
+    // Reset selected domains when loading a new file
+    setSelectedDomains([]);
   };
 
   const getAllRequests = (): HarRequest[] => {
@@ -145,6 +168,31 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
       return [];
     }
     return harData.log.entries;
+  };
+
+  // Get filtered requests based on pinned status and selected domains
+  const getFilteredRequests = (viewMode: string): HarRequest[] => {
+    let requests = getAllRequests();
+
+    // Filter by pinned status if in pinned view
+    // Do not filter by domains in this mode
+    if (viewMode === "pinned") {
+      requests = requests.filter((req) => req._custom?.pinned);
+    }
+
+    // Filter by domain if domains are selected
+    if (selectedDomains.length > 0) {
+      requests = requests.filter((req) => {
+        try {
+          const url = new URL(req.request.url);
+          return selectedDomains.includes(url.hostname);
+        } catch (error) {
+          return false;
+        }
+      });
+    }
+
+    return requests;
   };
 
   const selectRequest = (request: HarRequest | null) => {
@@ -179,17 +227,34 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
     return !!request._custom?.pinned;
   };
 
+  const toggleDomain = (domain: string) => {
+    setSelectedDomains((prev) =>
+      prev.includes(domain)
+        ? prev.filter((d) => d !== domain)
+        : [...prev, domain],
+    );
+  };
+
+  const clearDomainSelection = () => {
+    setSelectedDomains([]);
+  };
+
   return (
     <HarContext.Provider
       value={{
         harData,
         setHarFile,
         getAllRequests,
+        getFilteredRequests,
         selectedRequest,
         selectRequest,
         togglePin,
         isPinned,
         pinnedRequests,
+        availableDomains,
+        selectedDomains,
+        toggleDomain,
+        clearDomainSelection,
       }}
     >
       {children}

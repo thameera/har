@@ -12,13 +12,18 @@ import {
 import "dockview-react/dist/styles/dockview.css";
 import { useTheme } from "next-themes";
 
-export function PinnedPane() {
+interface PinnedPaneProps {
+  view: string;
+}
+
+export function PinnedPane({ view }: PinnedPaneProps) {
   const [key, setKey] = useState(0); // Used to force re-render of dockview
   const dockviewApiRef = useRef<DockviewApi | null>(null);
 
   const { theme } = useTheme();
 
-  const { pinnedRequests, togglePin } = useHar();
+  const { getFilteredRequests, togglePin } = useHar();
+  const pinnedRequests = getFilteredRequests(view);
 
   // Update key whenever pinnedRequests changes to force dockview rebuild
   useEffect(() => {

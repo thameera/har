@@ -10,15 +10,19 @@ const formatRequestTime = (dateTimeString: string): string => {
   }
 };
 
-export const RequestsList = () => {
+interface RequestsListProps {
+  view: string;
+}
+
+export const RequestsList = ({ view }: RequestsListProps) => {
   const {
-    getAllRequests,
+    getFilteredRequests,
     selectedRequest,
     selectRequest,
     togglePin,
     isPinned,
   } = useHar();
-  const requests = getAllRequests();
+  const requests = getFilteredRequests(view);
 
   if (requests.length === 0) {
     return (
