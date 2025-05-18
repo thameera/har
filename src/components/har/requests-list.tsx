@@ -116,7 +116,7 @@ export const RequestsList = memo(({ view }: RequestsListProps) => {
 
   // Memoize the filtered requests
   const requests = useMemo(() => {
-    console.log("Recalculating requests in RequestsList");
+    console.log("Recalculating requests in RequestsList - view:", view);
     return getFilteredRequests(view);
   }, [getFilteredRequests, view]);
 

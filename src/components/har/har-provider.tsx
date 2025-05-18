@@ -1,4 +1,10 @@
-import { createContext, useContext, useState, useMemo } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useMemo,
+  useCallback,
+} from "react";
 import {
   HarContextType,
   HarData,
@@ -166,16 +172,20 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
     setSelectedDomains([]);
   };
 
-  const getAllRequests = (): HarRequest[] => {
+  // Memoize getAllRequests to maintain stable reference
+  const getAllRequests = useCallback((): HarRequest[] => {
     if (!harData?.log?.entries) {
       return [];
     }
     return harData.log.entries;
-  };
+  }, [harData]);
 
   // Cache for filtered requests to avoid recalculation on every render
   const filteredRequestsCache = useMemo(() => {
-    console.log("Recalculating filteredRequestsCache");
+    console.log(
+      "Recalculating filteredRequestsCache - selectedDomains:",
+      selectedDomains.length,
+    );
     // Create a map of view mode to filtered requests
     const cache: Record<string, HarRequest[]> = {
       all: [],
@@ -205,10 +215,11 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
     }
 
     return cache;
-  }, [harData, selectedDomains, getAllRequests]);
+  }, [selectedDomains, getAllRequests]);
 
   // Memoize the getFilteredRequests function itself to maintain stable reference
   const getFilteredRequests = useMemo(() => {
+    console.log("Recalculating getFilteredRequests function");
     // Return a stable function reference
     return (viewMode: string): HarRequest[] => {
       // Return pre-calculated results from cache
