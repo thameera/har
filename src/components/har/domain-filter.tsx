@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { useHar } from "./har-provider";
 import {
   Popover,
@@ -18,6 +18,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { X, ChevronsUpDown, Check } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export function DomainFilter() {
   const {

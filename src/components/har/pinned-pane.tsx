@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useMemo, useCallback, memo } from "react";
+import { useEffect, useRef, useState, useMemo, memo } from "react";
 import { useHar } from "./har-provider";
 import { RequestDetails } from "./request-details";
 import {
@@ -11,6 +11,7 @@ import {
 } from "dockview-react";
 import "dockview-react/dist/styles/dockview.css";
 import { useTheme } from "next-themes";
+import { HarRequest } from "./harTypes";
 
 interface PinnedPaneProps {
   view: string;
@@ -23,7 +24,7 @@ const DockviewContent = memo(
     togglePin,
     theme,
   }: {
-    pinnedRequests: any[];
+    pinnedRequests: HarRequest[];
     togglePin: (id: number) => void;
     theme: string;
   }) => {

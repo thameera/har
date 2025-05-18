@@ -205,7 +205,7 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
     }
 
     return cache;
-  }, [harData, selectedDomains]); // Only recalculate when these dependencies change
+  }, [harData, selectedDomains, getAllRequests]);
 
   // Memoize the getFilteredRequests function itself to maintain stable reference
   const getFilteredRequests = useMemo(() => {
@@ -223,7 +223,7 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
         return filteredRequestsCache.all;
       }
     };
-  }, [filteredRequestsCache]); // Only recreate when the cache changes
+  }, [filteredRequestsCache, selectedDomains.length]);
 
   const selectRequest = (request: HarRequest | null) => {
     setSelectedRequest(request);

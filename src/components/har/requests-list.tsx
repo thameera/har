@@ -1,6 +1,7 @@
 import { useHar } from "./har-provider";
 import { PinIcon } from "lucide-react";
 import { memo, useMemo, useCallback } from "react";
+import { HarRequest } from "./harTypes";
 
 const formatRequestTime = (dateTimeString: string): string => {
   try {
@@ -24,7 +25,7 @@ const RequestItem = memo(
     onTogglePin,
     isPinned,
   }: {
-    request: any;
+    request: HarRequest;
     isSelected: boolean;
     onSelect: () => void;
     onTogglePin: (e: React.MouseEvent) => void;
@@ -132,7 +133,7 @@ export const RequestsList = memo(({ view }: RequestsListProps) => {
 
   // Memoize the select handler factory to maintain reference stability
   const createSelectHandler = useCallback(
-    (request: any) => {
+    (request: HarRequest) => {
       return () => selectRequest(request);
     },
     [selectRequest],
@@ -179,6 +180,8 @@ export const RequestsList = memo(({ view }: RequestsListProps) => {
     </div>
   );
 });
+
+RequestsList.displayName = "RequestsList";
 
 const getStatusColor = (status: number): string => {
   if (status >= 200 && status < 300) {
