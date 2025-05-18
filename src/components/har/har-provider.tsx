@@ -173,29 +173,57 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
     return harData.log.entries;
   };
 
-  // Get filtered requests based on pinned status and selected domains
-  const getFilteredRequests = (viewMode: string): HarRequest[] => {
-    let requests = getAllRequests();
+  // Cache for filtered requests to avoid recalculation on every render
+  const filteredRequestsCache = useMemo(() => {
+    console.log("Recalculating filteredRequestsCache");
+    // Create a map of view mode to filtered requests
+    const cache: Record<string, HarRequest[]> = {
+      all: [],
+      pinned: [],
+      "all-with-domains": [], // Special key for all + domain filtering
+    };
 
-    // Filter by pinned status if in pinned view
-    // Do not filter by domains in this mode
-    if (viewMode === "pinned") {
-      requests = requests.filter((req) => req._custom?.pinned);
-    }
+    // Get all requests once
+    const allRequests = getAllRequests();
 
-    // Filter by domain if domains are selected
+    // Fill cache with filtered results
+    cache.all = allRequests;
+
+    // Pinned requests
+    cache.pinned = allRequests.filter((req) => req._custom?.pinned);
+
+    // Domain-filtered requests (all view)
     if (selectedDomains.length > 0) {
-      requests = requests.filter((req) => {
-        return (
+      cache["all-with-domains"] = allRequests.filter(
+        (req) =>
           req._custom &&
           req._custom.domain &&
-          selectedDomains.includes(req._custom.domain)
-        );
-      });
+          selectedDomains.includes(req._custom.domain),
+      );
+    } else {
+      cache["all-with-domains"] = allRequests; // No domain filtering
     }
 
-    return requests;
-  };
+    return cache;
+  }, [harData, selectedDomains]); // Only recalculate when these dependencies change
+
+  // Memoize the getFilteredRequests function itself to maintain stable reference
+  const getFilteredRequests = useMemo(() => {
+    // Return a stable function reference
+    return (viewMode: string): HarRequest[] => {
+      // Return pre-calculated results from cache
+      if (viewMode === "pinned") {
+        // For pinned view, always use the pinned cache (ignore domain filtering)
+        return filteredRequestsCache.pinned;
+      } else if (selectedDomains.length > 0) {
+        // For all view with domain filtering
+        return filteredRequestsCache["all-with-domains"];
+      } else {
+        // For all view with no domain filtering
+        return filteredRequestsCache.all;
+      }
+    };
+  }, [filteredRequestsCache]); // Only recreate when the cache changes
 
   const selectRequest = (request: HarRequest | null) => {
     setSelectedRequest(request);

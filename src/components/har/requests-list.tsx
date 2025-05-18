@@ -1,5 +1,6 @@
 import { useHar } from "./har-provider";
 import { PinIcon } from "lucide-react";
+import { memo, useMemo, useCallback } from "react";
 
 const formatRequestTime = (dateTimeString: string): string => {
   try {
@@ -14,7 +15,96 @@ interface RequestsListProps {
   view: string;
 }
 
-export const RequestsList = ({ view }: RequestsListProps) => {
+// Memoized individual request item component with custom equality check
+const RequestItem = memo(
+  ({
+    request,
+    isSelected,
+    onSelect,
+    onTogglePin,
+    isPinned,
+  }: {
+    request: any;
+    isSelected: boolean;
+    onSelect: () => void;
+    onTogglePin: (e: React.MouseEvent) => void;
+    isPinned: boolean;
+  }) => {
+    return (
+      <div
+        className={`flex items-center gap-2 p-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer rounded transition-colors duration-150 ${
+          isSelected ? "bg-blue-100 dark:bg-blue-900/30" : ""
+        } border border-black dark:border-gray-600 mb-1 rounded-md`}
+        onClick={onSelect}
+      >
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="px-2 py-0.5 text-xs rounded bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+              {request.request.method}
+            </span>
+            <span className="text-sm truncate text-gray-900 dark:text-gray-100">
+              {(() => {
+                if (request._custom && request._custom.urlObj) {
+                  const url = request._custom.urlObj;
+                  return (
+                    <>
+                      <span className="text-gray-600 dark:text-gray-400">
+                        {url.protocol + "//"}
+                      </span>
+                      <span className="font-medium text-blue-500 dark:text-blue-200">
+                        {url.hostname}
+                        {url.port ? `:${url.port}` : ""}
+                      </span>
+                      <span className="text-gray-600 dark:text-gray-400">
+                        {url.pathname + url.search}
+                      </span>
+                    </>
+                  );
+                } else {
+                  // Fallback to original URL if urlObj is null
+                  return request.request.url;
+                }
+              })()}
+            </span>
+          </div>
+          <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+            <span className={getStatusColor(request.response.status)}>
+              {request.response.status}
+            </span>
+            <span className="px-1.5 rounded bg-gray-100 dark:bg-gray-700">
+              {formatRequestTime(request.startedDateTime)}
+            </span>
+            <span>{formatSize(request.response.content.size)}</span>
+            <span>{formatTime(request.time)}ms</span>
+          </div>
+        </div>
+        <button
+          onClick={onTogglePin}
+          className={`p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors icon-button ${
+            isPinned
+              ? "text-blue-500 dark:text-blue-400"
+              : "text-gray-400 dark:text-gray-500"
+          }`}
+          title={isPinned ? "Unpin request" : "Pin request"}
+        >
+          <PinIcon className="h-4 w-4 icon-button" />
+        </button>
+      </div>
+    );
+  },
+  // Custom equality check to minimize renders
+  (prevProps, nextProps) => {
+    return (
+      prevProps.isSelected === nextProps.isSelected &&
+      prevProps.isPinned === nextProps.isPinned &&
+      prevProps.request === nextProps.request
+    );
+  },
+);
+
+RequestItem.displayName = "RequestItem";
+
+export const RequestsList = memo(({ view }: RequestsListProps) => {
   const {
     getFilteredRequests,
     selectedRequest,
@@ -22,7 +112,31 @@ export const RequestsList = ({ view }: RequestsListProps) => {
     togglePin,
     isPinned,
   } = useHar();
-  const requests = getFilteredRequests(view);
+
+  // Memoize the filtered requests
+  const requests = useMemo(() => {
+    console.log("Recalculating requests in RequestsList");
+    return getFilteredRequests(view);
+  }, [getFilteredRequests, view]);
+
+  // Memoize the toggle pin handler factory to maintain reference stability
+  const createTogglePinHandler = useCallback(
+    (id: number) => {
+      return (e: React.MouseEvent) => {
+        e.stopPropagation();
+        togglePin(id);
+      };
+    },
+    [togglePin],
+  );
+
+  // Memoize the select handler factory to maintain reference stability
+  const createSelectHandler = useCallback(
+    (request: any) => {
+      return () => selectRequest(request);
+    },
+    [selectRequest],
+  );
 
   if (requests.length === 0) {
     return (
@@ -36,78 +150,35 @@ export const RequestsList = ({ view }: RequestsListProps) => {
     <div className="h-full overflow-hidden">
       <div className="h-full overflow-y-auto">
         <div className="p-2">
-          {requests.map((request, index) => (
-            <div
-              key={index}
-              className={`flex items-center gap-2 p-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer rounded transition-colors duration-150 ${
-                selectedRequest === request
-                  ? "bg-blue-100 dark:bg-blue-900/30"
-                  : ""
-              } border border-black dark:border-gray-600 mb-1 rounded-md`}
-              onClick={() => selectRequest(request)}
-            >
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="px-2 py-0.5 text-xs rounded bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100">
-                    {request.request.method}
-                  </span>
-                  <span className="text-sm truncate text-gray-900 dark:text-gray-100">
-                    {(() => {
-                      if (request._custom && request._custom.urlObj) {
-                        const url = request._custom.urlObj;
-                        return (
-                          <>
-                            <span className="text-gray-600 dark:text-gray-400">
-                              {url.protocol + "//"}
-                            </span>
-                            <span className="font-medium text-blue-500 dark:text-blue-200">
-                              {url.hostname}
-                              {url.port ? `:${url.port}` : ""}
-                            </span>
-                            <span className="text-gray-600 dark:text-gray-400">
-                              {url.pathname + url.search}
-                            </span>
-                          </>
-                        );
-                      } else {
-                        // Fallback to original URL if urlObj is null
-                        return request.request.url;
-                      }
-                    })()}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
-                  <span className={getStatusColor(request.response.status)}>
-                    {request.response.status}
-                  </span>
-                  <span className="px-1.5 rounded bg-gray-100 dark:bg-gray-700">
-                    {formatRequestTime(request.startedDateTime)}
-                  </span>
-                  <span>{formatSize(request.response.content.size)}</span>
-                  <span>{formatTime(request.time)}ms</span>
-                </div>
-              </div>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  togglePin(request._custom!.id);
-                }}
-                className={`p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors icon-button ${
-                  isPinned(request)
-                    ? "text-blue-500 dark:text-blue-400"
-                    : "text-gray-400 dark:text-gray-500"
-                }`}
-                title={isPinned(request) ? "Unpin request" : "Pin request"}
-              >
-                <PinIcon className="h-4 w-4 icon-button" />
-              </button>
-            </div>
-          ))}
+          {requests.map((request) => {
+            // Create stable callback references for each item
+            const requestId = request._custom?.id;
+            const handleSelect = createSelectHandler(request);
+            const handleTogglePin =
+              requestId !== undefined
+                ? createTogglePinHandler(requestId)
+                : (e: React.MouseEvent) => {
+                    e.stopPropagation();
+                  };
+            const isItemSelected = selectedRequest === request;
+            const isItemPinned = isPinned(request);
+
+            return (
+              <RequestItem
+                key={requestId || Math.random()}
+                request={request}
+                isSelected={isItemSelected}
+                onSelect={handleSelect}
+                onTogglePin={handleTogglePin}
+                isPinned={isItemPinned}
+              />
+            );
+          })}
         </div>
       </div>
     </div>
   );
-};
+});
 
 const getStatusColor = (status: number): string => {
   if (status >= 200 && status < 300) {
