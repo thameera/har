@@ -43,14 +43,14 @@ export function DomainFilter() {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="flex justify-between min-w-[200px] h-9"
+          className="flex justify-between min-w-[200px] h-9 relative"
         >
           {selectedDomains.length > 0
             ? `${selectedDomains.length} ${selectedDomains.length === 1 ? "domain" : "domains"}`
             : "Filter by domain"}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           {selectedDomains.length > 0 && (
-            <span className="ml-1 rounded-full w-2 h-2 bg-primary absolute -right-1 -top-1" />
+            <span className="rounded-full w-2 h-2 bg-primary absolute -right-1 -top-1" />
           )}
         </Button>
       </PopoverTrigger>
