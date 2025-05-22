@@ -50,6 +50,15 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
       );
     };
 
+    const safeDecodeURIComponent = (value: string) => {
+      try {
+        return decodeURIComponent(value);
+      } catch (err) {
+        console.warn(`could not decode value: `, value);
+      }
+      return value;
+    };
+
     data.log.entries.forEach((request, index) => {
       // Initialize the custom data object
       request._custom = {
@@ -71,8 +80,8 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
         if (searchParams.toString()) {
           const queryParams = Array.from(searchParams.entries()).map(
             ([key, value]) => ({
-              name: decodeURIComponent(key),
-              value: decodeURIComponent(value),
+              name: safeDecodeURIComponent(key),
+              value: safeDecodeURIComponent(value),
               isSaml: SAML_KEYS.has(key),
             }),
           );
@@ -90,8 +99,8 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
           if (hashParams.toString()) {
             request._custom.hashParams = Array.from(hashParams.entries()).map(
               ([key, value]): NameValueParam => ({
-                name: decodeURIComponent(key),
-                value: decodeURIComponent(value),
+                name: safeDecodeURIComponent(key),
+                value: safeDecodeURIComponent(value),
                 isJwt: JWT_KEYS.has(key) && hasJwtStructure(value),
               }),
             );
@@ -111,8 +120,8 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
         if (hasFormData) {
           const formData = request.request.postData!.params!.map(
             (param): NameValueParam => ({
-              name: decodeURIComponent(param.name),
-              value: decodeURIComponent(param.value),
+              name: safeDecodeURIComponent(param.name),
+              value: safeDecodeURIComponent(param.value),
               isSaml: SAML_KEYS.has(param.name),
               isJwt: JWT_KEYS.has(param.name) && hasJwtStructure(param.value),
             }),
