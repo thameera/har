@@ -90,5 +90,7 @@ export interface HarContextType {
   clearMethodSelection: () => void;
   searchText: string;
   setSearchText: (text: string) => void;
+  isFullSearch: boolean;
+  setIsFullSearch: (enabled: boolean) => void;
   clearAllFilters: () => void;
 }

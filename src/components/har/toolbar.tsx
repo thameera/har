@@ -12,7 +12,13 @@ interface ToolbarProps {
 
 export function Toolbar({ onViewChange }: ToolbarProps) {
   const [view, setView] = useState<string>("all");
-  const { pinnedRequests, searchText, setSearchText } = useHar();
+  const {
+    pinnedRequests,
+    searchText,
+    setSearchText,
+    isFullSearch,
+    setIsFullSearch,
+  } = useHar();
   const hasPinnedRequests = pinnedRequests.length > 0;
 
   // Notify HarView when view changes
@@ -64,8 +70,9 @@ export function Toolbar({ onViewChange }: ToolbarProps) {
         <TextFilter
           value={searchText}
           onChange={setSearchText}
-          placeholder="Search URLs..."
-          className="min-w-[200px]"
+          isFullSearch={isFullSearch}
+          onFullSearchToggle={setIsFullSearch}
+          className="min-w-[300px]"
         />
       </div>
     </div>

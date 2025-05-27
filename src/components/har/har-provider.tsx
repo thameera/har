@@ -26,9 +26,109 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
   const [availableMethods, setAvailableMethods] = useState<string[]>([]);
   const [selectedMethods, setSelectedMethods] = useState<string[]>([]);
   const [searchText, setSearchText] = useState<string>("");
+  const [isFullSearch, setIsFullSearch] = useState<boolean>(false);
 
   // Debounce search text to avoid excessive filtering
-  const debouncedSearchText = useDebounce(searchText, 300);
+  // Use longer delay for full search due to performance impact
+  const searchDelay = isFullSearch ? 500 : 300;
+  const debouncedSearchText = useDebounce(searchText, searchDelay);
+
+  // Helper functions for full text search
+  const searchHeaders = (
+    headers: Array<{ name: string; value: string }>,
+    term: string,
+  ): boolean => {
+    return headers.some(
+      (header) =>
+        header.name.toLowerCase().includes(term) ||
+        header.value.toLowerCase().includes(term),
+    );
+  };
+
+  const searchKeyValuePairs = (
+    pairs: Array<{ name: string; value: string }> | undefined,
+    term: string,
+  ): boolean => {
+    if (!pairs) return false;
+    return pairs.some(
+      (pair) =>
+        pair.name.toLowerCase().includes(term) ||
+        pair.value.toLowerCase().includes(term),
+    );
+  };
+
+  const searchRequestBody = (
+    postData: { text?: string } | undefined,
+    term: string,
+  ): boolean => {
+    if (!postData?.text) return false;
+    // Limit search to prevent performance issues
+    const maxSearchLength = 10000; // 10KB limit for request body
+    const searchText =
+      postData.text.length > maxSearchLength
+        ? postData.text.substring(0, maxSearchLength)
+        : postData.text;
+    return searchText.toLowerCase().includes(term);
+  };
+
+  const searchResponseBody = (
+    content: { text?: string } | undefined,
+    term: string,
+  ): boolean => {
+    if (!content?.text) return false;
+    // Limit search to prevent performance issues with large responses
+    const maxSearchLength = 50000; // 50KB limit for response body
+    const searchText =
+      content.text.length > maxSearchLength
+        ? content.text.substring(0, maxSearchLength)
+        : content.text;
+    return searchText.toLowerCase().includes(term);
+  };
+
+  const searchAllFields = useCallback(
+    (request: HarRequest, searchTerm: string): boolean => {
+      const searchLower = searchTerm.toLowerCase();
+
+      // URL search (fastest, check first)
+      if (request.request.url.toLowerCase().includes(searchLower)) return true;
+
+      // Method search
+      if (request.request.method.toLowerCase().includes(searchLower))
+        return true;
+
+      // Headers search (request & response)
+      if (searchHeaders(request.request.headers, searchLower)) return true;
+      if (searchHeaders(request.response.headers, searchLower)) return true;
+
+      // Form data search
+      if (searchKeyValuePairs(request._custom?.formData, searchLower))
+        return true;
+
+      // Query params search
+      if (searchKeyValuePairs(request._custom?.queryParams, searchLower))
+        return true;
+
+      // Hash params search
+      if (searchKeyValuePairs(request._custom?.hashParams, searchLower))
+        return true;
+
+      // Cookies search
+      if (searchKeyValuePairs(request.request.cookies, searchLower))
+        return true;
+      if (searchKeyValuePairs(request.response.cookies, searchLower))
+        return true;
+
+      // Request body search
+      if (searchRequestBody(request.request.postData, searchLower)) return true;
+
+      // Response body search (most expensive, check last)
+      if (searchResponseBody(request.response.content, searchLower))
+        return true;
+
+      return false;
+    },
+    [],
+  );
 
   // Extract domains to build availableDomains set
   const extractDomains = (entries: HarRequest[]) => {
@@ -199,10 +299,11 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
     const methods = extractMethods(data.log.entries);
     setAvailableMethods(methods);
 
-    // Reset selected domains, methods, and search text when loading a new file
+    // Reset selected domains, methods, search text, and full search when loading a new file
     setSelectedDomains([]);
     setSelectedMethods([]);
     setSearchText("");
+    setIsFullSearch(false);
   };
 
   // Memoize getAllRequests to maintain stable reference
@@ -222,6 +323,8 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
       selectedMethods.length,
       "searchText:",
       debouncedSearchText.length > 0 ? `"${debouncedSearchText}"` : "none",
+      "isFullSearch:",
+      isFullSearch,
     );
     // Create a map of view mode to filtered requests
     const cache: Record<string, HarRequest[]> = {
@@ -258,12 +361,14 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
           !hasMethodFilter ||
           selectedMethods.includes(req.request.method.toUpperCase());
 
-        // Text filtering (case-insensitive URL search)
+        // Text filtering (URL-only or full text search)
         const textMatch =
           !hasTextFilter ||
-          req.request.url
-            .toLowerCase()
-            .includes(debouncedSearchText.toLowerCase());
+          (isFullSearch
+            ? searchAllFields(req, debouncedSearchText.trim())
+            : req.request.url
+                .toLowerCase()
+                .includes(debouncedSearchText.toLowerCase()));
 
         return domainMatch && methodMatch && textMatch;
       });
@@ -272,7 +377,14 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
     }
 
     return cache;
-  }, [selectedDomains, selectedMethods, debouncedSearchText, getAllRequests]);
+  }, [
+    selectedDomains,
+    selectedMethods,
+    debouncedSearchText,
+    isFullSearch,
+    getAllRequests,
+    searchAllFields,
+  ]);
 
   // Memoize the getFilteredRequests function itself to maintain stable reference
   const getFilteredRequests = useMemo(() => {
@@ -300,6 +412,7 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
     selectedDomains.length,
     selectedMethods.length,
     debouncedSearchText,
+    isFullSearch,
   ]);
 
   const selectRequest = (request: HarRequest | null) => {
@@ -362,6 +475,7 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
     setSelectedDomains([]);
     setSelectedMethods([]);
     setSearchText("");
+    setIsFullSearch(false);
   };
 
   return (
@@ -386,6 +500,8 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
         clearMethodSelection,
         searchText,
         setSearchText,
+        isFullSearch,
+        setIsFullSearch,
         clearAllFilters,
       }}
     >
