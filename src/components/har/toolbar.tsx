@@ -3,6 +3,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { cn } from "@/lib/utils";
 import { useHar } from "./har-provider";
 import { DomainFilter } from "./domain-filter";
+import { MethodFilter } from "./method-filter";
 
 interface ToolbarProps {
   onViewChange?: (view: string) => void;
@@ -58,6 +59,7 @@ export function Toolbar({ onViewChange }: ToolbarProps) {
         </ToggleGroup>
 
         <DomainFilter />
+        <MethodFilter />
       </div>
     </div>
   );

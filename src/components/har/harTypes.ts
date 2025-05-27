@@ -84,4 +84,8 @@ export interface HarContextType {
   selectedDomains: string[];
   toggleDomain: (domain: string) => void;
   clearDomainSelection: () => void;
+  availableMethods: string[];
+  selectedMethods: string[];
+  toggleMethod: (method: string) => void;
+  clearMethodSelection: () => void;
 }
