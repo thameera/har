@@ -5,6 +5,7 @@ import {
   useMemo,
   useCallback,
 } from "react";
+import { useDebounce } from "@/hooks/useDebounce";
 import {
   HarContextType,
   HarData,
@@ -24,6 +25,10 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
   const [selectedDomains, setSelectedDomains] = useState<string[]>([]);
   const [availableMethods, setAvailableMethods] = useState<string[]>([]);
   const [selectedMethods, setSelectedMethods] = useState<string[]>([]);
+  const [searchText, setSearchText] = useState<string>("");
+
+  // Debounce search text to avoid excessive filtering
+  const debouncedSearchText = useDebounce(searchText, 300);
 
   // Extract domains to build availableDomains set
   const extractDomains = (entries: HarRequest[]) => {
@@ -194,9 +199,10 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
     const methods = extractMethods(data.log.entries);
     setAvailableMethods(methods);
 
-    // Reset selected domains and methods when loading a new file
+    // Reset selected domains, methods, and search text when loading a new file
     setSelectedDomains([]);
     setSelectedMethods([]);
+    setSearchText("");
   };
 
   // Memoize getAllRequests to maintain stable reference
@@ -214,6 +220,8 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
       selectedDomains.length,
       "selectedMethods:",
       selectedMethods.length,
+      "searchText:",
+      debouncedSearchText.length > 0 ? `"${debouncedSearchText}"` : "none",
     );
     // Create a map of view mode to filtered requests
     const cache: Record<string, HarRequest[]> = {
@@ -231,11 +239,12 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
     // Pinned requests
     cache.pinned = allRequests.filter((req) => req._custom?.pinned);
 
-    // Apply combined filtering (domains and methods)
+    // Apply combined filtering (domains, methods, and text)
     const hasDomainFilter = selectedDomains.length > 0;
     const hasMethodFilter = selectedMethods.length > 0;
+    const hasTextFilter = debouncedSearchText.trim().length > 0;
 
-    if (hasDomainFilter || hasMethodFilter) {
+    if (hasDomainFilter || hasMethodFilter || hasTextFilter) {
       cache["all-with-filters"] = allRequests.filter((req) => {
         // Domain filtering
         const domainMatch =
@@ -249,14 +258,21 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
           !hasMethodFilter ||
           selectedMethods.includes(req.request.method.toUpperCase());
 
-        return domainMatch && methodMatch;
+        // Text filtering (case-insensitive URL search)
+        const textMatch =
+          !hasTextFilter ||
+          req.request.url
+            .toLowerCase()
+            .includes(debouncedSearchText.toLowerCase());
+
+        return domainMatch && methodMatch && textMatch;
       });
     } else {
       cache["all-with-filters"] = allRequests; // No filtering
     }
 
     return cache;
-  }, [selectedDomains, selectedMethods, getAllRequests]);
+  }, [selectedDomains, selectedMethods, debouncedSearchText, getAllRequests]);
 
   // Memoize the getFilteredRequests function itself to maintain stable reference
   const getFilteredRequests = useMemo(() => {
@@ -267,7 +283,11 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
       if (viewMode === "pinned") {
         // For pinned view, always use the pinned cache (ignore filtering)
         return filteredRequestsCache.pinned;
-      } else if (selectedDomains.length > 0 || selectedMethods.length > 0) {
+      } else if (
+        selectedDomains.length > 0 ||
+        selectedMethods.length > 0 ||
+        debouncedSearchText.trim().length > 0
+      ) {
         // For all view with filtering applied
         return filteredRequestsCache["all-with-filters"];
       } else {
@@ -275,7 +295,12 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
         return filteredRequestsCache.all;
       }
     };
-  }, [filteredRequestsCache, selectedDomains.length, selectedMethods.length]);
+  }, [
+    filteredRequestsCache,
+    selectedDomains.length,
+    selectedMethods.length,
+    debouncedSearchText,
+  ]);
 
   const selectRequest = (request: HarRequest | null) => {
     setSelectedRequest(request);
@@ -333,6 +358,12 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
     setSelectedMethods([]);
   };
 
+  const clearAllFilters = () => {
+    setSelectedDomains([]);
+    setSelectedMethods([]);
+    setSearchText("");
+  };
+
   return (
     <HarContext.Provider
       value={{
@@ -353,6 +384,9 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
         selectedMethods,
         toggleMethod,
         clearMethodSelection,
+        searchText,
+        setSearchText,
+        clearAllFilters,
       }}
     >
       {children}

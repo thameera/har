@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { useHar } from "./har-provider";
 import { DomainFilter } from "./domain-filter";
 import { MethodFilter } from "./method-filter";
+import { TextFilter } from "./text-filter";
 
 interface ToolbarProps {
   onViewChange?: (view: string) => void;
@@ -11,7 +12,7 @@ interface ToolbarProps {
 
 export function Toolbar({ onViewChange }: ToolbarProps) {
   const [view, setView] = useState<string>("all");
-  const { pinnedRequests } = useHar();
+  const { pinnedRequests, searchText, setSearchText } = useHar();
   const hasPinnedRequests = pinnedRequests.length > 0;
 
   // Notify HarView when view changes
@@ -60,6 +61,12 @@ export function Toolbar({ onViewChange }: ToolbarProps) {
 
         <DomainFilter />
         <MethodFilter />
+        <TextFilter
+          value={searchText}
+          onChange={setSearchText}
+          placeholder="Search URLs..."
+          className="min-w-[200px]"
+        />
       </div>
     </div>
   );

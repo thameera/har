@@ -88,4 +88,7 @@ export interface HarContextType {
   selectedMethods: string[];
   toggleMethod: (method: string) => void;
   clearMethodSelection: () => void;
+  searchText: string;
+  setSearchText: (text: string) => void;
+  clearAllFilters: () => void;
 }
