@@ -15,11 +15,11 @@ export function MethodFilter() {
       selectedItems={selectedMethods}
       onToggleItem={toggleMethod}
       onClearSelection={clearMethodSelection}
-      placeholder="Filter by method"
+      placeholder="Methods"
       singularLabel="method"
       pluralLabel="methods"
       searchPlaceholder="Search methods..."
-      minWidth="150px"
+      minWidth="75px"
     />
   );
 }
