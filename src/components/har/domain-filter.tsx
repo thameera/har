@@ -19,7 +19,7 @@ export function DomainFilter() {
       singularLabel="domain"
       pluralLabel="domains"
       searchPlaceholder="Search domains..."
-      minWidth="200px"
+      minWidth="150px"
     />
   );
 }

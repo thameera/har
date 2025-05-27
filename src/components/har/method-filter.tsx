@@ -19,7 +19,7 @@ export function MethodFilter() {
       singularLabel="method"
       pluralLabel="methods"
       searchPlaceholder="Search methods..."
-      minWidth="180px"
+      minWidth="150px"
     />
   );
 }
