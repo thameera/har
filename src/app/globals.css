@@ -127,6 +127,10 @@
   font-size: 12px;
 }
 
+.har-view-normal-font {
+  font-size: 16px;
+}
+
 /* MOST IMPORTANT: Directly target our new class with highest specificity */
 .har-view-small-font .har-accordion-trigger {
   font-size: 14px !important;
@@ -156,8 +160,16 @@
   font-size: 12px !important;
 }
 
+.har-view-normal-font .text-sm {
+  font-size: 16px !important;
+}
+
 .har-view-small-font .text-xs {
   font-size: 10px !important;
+}
+
+.har-view-normal-font .text-xs {
+  font-size: 14px !important;
 }
 
 /* Ensure regular buttons have reasonable size */
