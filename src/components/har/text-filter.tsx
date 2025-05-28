@@ -43,7 +43,7 @@ export function TextFilter({
             className="absolute right-2 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full transition-colors"
             title="Clear search"
           >
-            <X className="h-3 w-3 text-gray-500 dark:text-gray-400" />
+            <X className="h-4 w-4 text-gray-500 dark:text-gray-400" />
           </button>
         )}
       </div>
