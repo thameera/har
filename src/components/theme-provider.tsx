@@ -4,14 +4,16 @@ import * as React from "react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { createContext, useContext, useState } from "react";
 
-interface FontSizeContext {
-  fontSize: string;
+interface CustomThemeContextType {
+  currentfontSize: string;
   toggleFontSize: () => void;
 }
 
-const FontSizeContext = createContext<FontSizeContext | undefined>(undefined);
+const CustomThemeContext = createContext<CustomThemeContextType | undefined>(
+  undefined,
+);
 
-export const FontSizeProvider = ({
+export const CustomThemeProvider = ({
   children,
 }: {
   children: React.ReactNode;
@@ -21,17 +23,20 @@ export const FontSizeProvider = ({
   const toggleFontSize = () => {
     setFontSize(fontSize === "small" ? "normal" : "small");
   };
+
   return (
-    <FontSizeContext.Provider value={{ fontSize, toggleFontSize }}>
+    <CustomThemeContext.Provider
+      value={{ currentfontSize: fontSize, toggleFontSize }}
+    >
       {children}
-    </FontSizeContext.Provider>
+    </CustomThemeContext.Provider>
   );
 };
 
-export function useFont() {
-  const context = useContext(FontSizeContext);
+export function useCustomTheme() {
+  const context = useContext(CustomThemeContext);
   if (context === undefined) {
-    throw new Error("useHar must be used within a HarProvider");
+    throw new Error("useCustomTheme must be used within a CustomThemeProvider");
   }
   return context;
 }
@@ -42,7 +47,7 @@ export function ThemeProvider({
 }: React.ComponentProps<typeof NextThemesProvider>) {
   return (
     <NextThemesProvider {...props}>
-      <FontSizeProvider>{children}</FontSizeProvider>
+      <CustomThemeProvider>{children}</CustomThemeProvider>
     </NextThemesProvider>
   );
 }

@@ -4,10 +4,10 @@ import * as React from "react";
 import { ALargeSmall } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { useFont } from "./theme-provider";
+import { useCustomTheme } from "./theme-provider";
 
-export function TextSizeToggle() {
-  const { toggleFontSize, fontSize } = useFont();
+export function FontSizeToggle() {
+  const { toggleFontSize, currentfontSize } = useCustomTheme();
 
   return (
     <Button
@@ -17,8 +17,7 @@ export function TextSizeToggle() {
       className="mr-1"
     >
       <ALargeSmall
-        className=""
-        color={fontSize === "small" ? "white" : "pink"}
+        className={`transition-all ${currentfontSize === "small" ? `!h-[1.2rem] !w-[1.2rem]` : `!h-[2rem] !w-[2rem]`}`}
       />
     </Button>
   );

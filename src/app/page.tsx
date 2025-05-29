@@ -2,7 +2,7 @@
 
 import HarContainer from "@/components/har/har-container";
 import { ModeToggle } from "@/components/mode-toggle";
-import { TextSizeToggle } from "@/components/text-size-toggle";
+import { FontSizeToggle } from "@/components/font-size-toggle";
 
 export default function Home() {
   /*
@@ -14,8 +14,8 @@ export default function Home() {
       <div className="flex flex-col h-[calc(100vh-4rem)] gap-4">
         <div className="grid grid-cols-2">
           <h1 className="text-xl font-bold">HAR Analyzer</h1>
-          <div className=" justify-self-end">
-            <TextSizeToggle />
+          <div className="justify-self-end flex">
+            <FontSizeToggle />
             <ModeToggle />
           </div>
         </div>
