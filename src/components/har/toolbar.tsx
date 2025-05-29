@@ -5,6 +5,8 @@ import { useHar } from "./har-provider";
 import { DomainFilter } from "./domain-filter";
 import { MethodFilter } from "./method-filter";
 import { TextFilter } from "./text-filter";
+import { Button } from "@/components/ui/button";
+import { X } from "lucide-react";
 
 interface ToolbarProps {
   onViewChange?: (view: string) => void;
@@ -18,8 +20,17 @@ export function Toolbar({ onViewChange }: ToolbarProps) {
     setSearchText,
     isFullSearch,
     setIsFullSearch,
+    selectedDomains,
+    selectedMethods,
+    clearAllFilters,
   } = useHar();
   const hasPinnedRequests = pinnedRequests.length > 0;
+
+  // Check if any filters are applied
+  const hasActiveFilters =
+    selectedDomains.length > 0 ||
+    selectedMethods.length > 0 ||
+    searchText.trim().length > 0;
 
   // Notify HarView when view changes
   useEffect(() => {
@@ -74,6 +85,19 @@ export function Toolbar({ onViewChange }: ToolbarProps) {
           onFullSearchToggle={setIsFullSearch}
           className="min-w-[300px]"
         />
+
+        {hasActiveFilters && (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={clearAllFilters}
+            className="flex items-center gap-2 h-9"
+            title="Clear all filters"
+          >
+            <X className="h-4 w-4" />
+            Clear Filters
+          </Button>
+        )}
       </div>
     </div>
   );
