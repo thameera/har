@@ -1,14 +1,13 @@
 "use client";
 
 import * as React from "react";
-import { Moon, Sun, ALargeSmall } from "lucide-react";
-import { useTheme } from "next-themes";
+import { ALargeSmall } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { _temp_useFont } from "./theme-provider";
+import { useFont } from "./theme-provider";
 
 export function TextSizeToggle() {
-  const { toggleFontSize, fontSize } = _temp_useFont();
+  const { toggleFontSize, fontSize } = useFont();
 
   return (
     <Button

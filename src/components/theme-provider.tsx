@@ -28,7 +28,7 @@ export const FontSizeProvider = ({
   );
 };
 
-export function _temp_useFont() {
+export function useFont() {
   const context = useContext(FontSizeContext);
   if (context === undefined) {
     throw new Error("useHar must be used within a HarProvider");

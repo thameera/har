@@ -7,7 +7,7 @@ import { RequestsList } from "./requests-list";
 import { DetailsPane } from "./details-pane";
 import { PinnedPane } from "./pinned-pane";
 import { Toolbar } from "./toolbar";
-import { _temp_useFont } from "../theme-provider";
+import { useFont } from "../theme-provider";
 
 interface PanelsContainerProps {
   view: string;
@@ -40,7 +40,7 @@ function PanelsContainer({ view }: PanelsContainerProps) {
 export default function HarView() {
   const { harData } = useHar();
   const [currentView, setCurrentView] = useState<string>("all");
-  const { fontSize } = _temp_useFont();
+  const { fontSize } = useFont();
 
   const handleViewChange = (view: string) => {
     setCurrentView(view);

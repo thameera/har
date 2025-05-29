@@ -171,8 +171,8 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
     const safeDecodeURIComponent = (value: string) => {
       try {
         return decodeURIComponent(value);
-      } catch (err) {
-        console.warn(`could not decode value: `, value);
+      } catch {
+        console.warn(`could not decode value: , `, value);
       }
       return value;
     };
