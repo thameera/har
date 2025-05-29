@@ -1,6 +1,7 @@
 export interface HarRequest {
   startedDateTime: string;
   time: number;
+  serverIPAddress?: string;
   request: {
     method: string;
     url: string;
