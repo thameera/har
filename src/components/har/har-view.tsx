@@ -7,6 +7,7 @@ import { RequestsList } from "./requests-list";
 import { DetailsPane } from "./details-pane";
 import { PinnedPane } from "./pinned-pane";
 import { Toolbar } from "./toolbar";
+import { useCustomTheme } from "../theme-provider";
 
 interface PanelsContainerProps {
   view: string;
@@ -39,13 +40,14 @@ function PanelsContainer({ view }: PanelsContainerProps) {
 export default function HarView() {
   const { harData } = useHar();
   const [currentView, setCurrentView] = useState<string>("all");
+  const { currentfontSize } = useCustomTheme();
 
   const handleViewChange = (view: string) => {
     setCurrentView(view);
   };
 
   return (
-    <div className="h-full har-view-small-font">
+    <div className={`h-full har-view-${currentfontSize}-font`}>
       {!harData ? (
         <div className="h-full">
           <FileUploader />
