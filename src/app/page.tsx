@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <div className="min-h-screen p-8">
       <div className="flex flex-col h-[calc(100vh-4rem)] gap-4">
-        <div className="grid grid-cols-2">
+        <div className="flex items-center justify-between">
           <h1 className="text-xl font-bold">HAR Analyzer</h1>
           <div className="justify-self-end flex">
             <FontSizeToggle />
