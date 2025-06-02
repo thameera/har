@@ -14,7 +14,7 @@ export default function Home() {
       <div className="flex flex-col h-[calc(100vh-4rem)] gap-4">
         <div className="flex items-center justify-between">
           <h1 className="text-xl font-bold">HAR Analyzer</h1>
-          <div className="justify-self-end flex">
+          <div className="justify-self-end flex gap-2">
             <FontSizeToggle />
             <ModeToggle />
           </div>
