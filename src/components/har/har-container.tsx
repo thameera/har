@@ -4,19 +4,15 @@ import {
   PanelResizeHandle,
   ImperativePanelGroupHandle,
 } from "react-resizable-panels";
-import { useState, useCallback, useRef, useEffect } from "react";
-import { PlusIcon, MinusIcon } from "lucide-react";
+import { useRef, useEffect } from "react";
 
 import HarView from "./har-view";
 import { HarProvider } from "./har-provider";
+import { useCustomTheme } from "../theme-provider";
 
 export default function HarContainer() {
-  const [isSecondPanelVisible, setIsSecondPanelVisible] = useState(false);
+  const { isSecondPanelVisible } = useCustomTheme();
   const panelGroupRef = useRef<ImperativePanelGroupHandle>(null);
-
-  const toggleSecondPanel = useCallback(() => {
-    setIsSecondPanelVisible((prev) => !prev);
-  }, []);
 
   // Set initial panel sizes when visibility changes
   useEffect(() => {
@@ -69,7 +65,7 @@ export default function HarContainer() {
       </PanelGroup>
 
       {/* Toggle button for second panel */}
-      <button
+      {/* <button
         onClick={toggleSecondPanel}
         className="absolute right-4 top-4 bg-muted hover:bg-muted/80 p-2 rounded-md border border-border transition-colors z-20 shadow-sm flex items-center justify-center"
         title={isSecondPanelVisible ? "Hide right panel" : "Show right panel"}
@@ -79,7 +75,7 @@ export default function HarContainer() {
         ) : (
           <PlusIcon className="h-4 w-4" />
         )}
-      </button>
+      </button> */}
     </div>
   );
 }

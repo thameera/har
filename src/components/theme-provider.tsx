@@ -2,11 +2,13 @@
 
 import * as React from "react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useCallback } from "react";
 
 interface CustomThemeContextType {
   currentfontSize: string;
   toggleFontSize: () => void;
+  isSecondPanelVisible: boolean;
+  toggleSecondPanel: () => void;
 }
 
 const CustomThemeContext = createContext<CustomThemeContextType | undefined>(
@@ -19,6 +21,11 @@ export const CustomThemeProvider = ({
   children: React.ReactNode;
 }) => {
   const [fontSize, setFontSize] = useState("small");
+  const [isSecondPanelVisible, setIsSecondPanelVisible] = useState(false);
+
+  const toggleSecondPanel = useCallback(() => {
+    setIsSecondPanelVisible((prev) => !prev);
+  }, []);
 
   const toggleFontSize = () => {
     setFontSize(fontSize === "small" ? "normal" : "small");
@@ -26,7 +33,12 @@ export const CustomThemeProvider = ({
 
   return (
     <CustomThemeContext.Provider
-      value={{ currentfontSize: fontSize, toggleFontSize }}
+      value={{
+        currentfontSize: fontSize,
+        toggleFontSize,
+        isSecondPanelVisible,
+        toggleSecondPanel,
+      }}
     >
       {children}
     </CustomThemeContext.Provider>
