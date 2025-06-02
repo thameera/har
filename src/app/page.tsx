@@ -3,6 +3,7 @@
 import HarContainer from "@/components/har/har-container";
 import { ModeToggle } from "@/components/mode-toggle";
 import { FontSizeToggle } from "@/components/font-size-toggle";
+import { SplitViewToggle } from "@/components/split-view-toggle";
 
 export default function Home() {
   /*
@@ -15,6 +16,7 @@ export default function Home() {
         <div className="flex items-center justify-between">
           <h1 className="text-xl font-bold">HAR Analyzer</h1>
           <div className="justify-self-end flex gap-2">
+            <SplitViewToggle />
             <FontSizeToggle />
             <ModeToggle />
           </div>
