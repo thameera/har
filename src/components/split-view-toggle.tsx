@@ -11,7 +11,7 @@ export function SplitViewToggle() {
       onClick={toggleSecondPanel}
       title={isSecondPanelVisible ? "Hide right panel" : "Show right panel"}
     >
-      <Columns2 className="!w-[1.4px] !h-[1.4px]" />
+      <Columns2 className="!w-[1.4rem] !h-[1.4rem]" />
     </Button>
   );
 }
