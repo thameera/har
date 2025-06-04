@@ -15,7 +15,6 @@ export function FontSizeToggle() {
         if (value && currentfontSize !== value) toggleFontSize();
       }}
       variant="outline"
-      className="border border-input"
     >
       <ToggleGroupItem
         value="small"

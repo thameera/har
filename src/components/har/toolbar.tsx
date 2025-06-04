@@ -49,7 +49,6 @@ export function Toolbar({ onViewChange }: ToolbarProps) {
             if (value) setView(value);
           }}
           variant="outline"
-          className="border border-input"
         >
           <ToggleGroupItem
             value="all"
