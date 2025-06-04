@@ -23,7 +23,12 @@ export default function HarContainer() {
       if (isSecondPanelVisible && panels[0] > 0.9) {
         panelGroupRef.current.setLayout([0.5, 0.5]);
       } else if (!isSecondPanelVisible && panels.length > 1) {
-        panelGroupRef.current.setLayout([1, 0]);
+        // Delay the layout change to allow CSS transition to complete
+        setTimeout(() => {
+          if (panelGroupRef.current) {
+            panelGroupRef.current.setLayout([1, 0]);
+          }
+        }, 200);
       }
     }
   }, [isSecondPanelVisible]);
