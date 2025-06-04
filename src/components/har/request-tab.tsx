@@ -29,12 +29,7 @@ export function RequestTab({ request }: RequestTabProps) {
     <Accordion
       type="multiple"
       className="w-full"
-      defaultValue={[
-        "url",
-        "headers",
-        ...(hasFormData ? ["formdata"] : []),
-        ...(hasRawPostData ? ["rawpostdata"] : []),
-      ]}
+      defaultValue={["url", "headers", "formdata", "rawpostdata"]}
     >
       <AccordionItem value="url">
         <AccordionTrigger>URL</AccordionTrigger>
