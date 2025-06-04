@@ -63,19 +63,6 @@ export default function HarContainer() {
           </HarProvider>
         </Panel>
       </PanelGroup>
-
-      {/* Toggle button for second panel */}
-      {/* <button
-        onClick={toggleSecondPanel}
-        className="absolute right-4 top-4 bg-muted hover:bg-muted/80 p-2 rounded-md border border-border transition-colors z-20 shadow-sm flex items-center justify-center"
-        title={isSecondPanelVisible ? "Hide right panel" : "Show right panel"}
-      >
-        {isSecondPanelVisible ? (
-          <MinusIcon className="h-4 w-4" />
-        ) : (
-          <PlusIcon className="h-4 w-4" />
-        )}
-      </button> */}
     </div>
   );
 }
