@@ -14,7 +14,7 @@ export default function Home() {
     <div className="min-h-screen p-8">
       <div className="flex flex-col h-[calc(100vh-4rem)] gap-4">
         <div className="flex items-center justify-between">
-          <h1 className="text-xl font-bold">HAR Analyzer</h1>
+          <h1 className="text-4xl font-bold font-caveat">HAR Trail</h1>
           <div className="justify-self-end flex gap-2">
             <SplitViewToggle />
             <FontSizeToggle />
