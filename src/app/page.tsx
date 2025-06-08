@@ -11,10 +11,15 @@ export default function Home() {
    * the Toolbox project layout.
    */
   return (
-    <div className="min-h-screen p-8">
+    <div className="min-h-screen px-8 py-4">
       <div className="flex flex-col h-[calc(100vh-4rem)] gap-4">
         <div className="flex items-center justify-between">
-          <h1 className="text-4xl font-bold font-sensation">HAR Tool</h1>
+          <div>
+            <h1 className="text-4xl font-bold font-sensation">HAR Tool</h1>
+            <p className="text-sm text-muted-foreground mt-1">
+              View and analyze HAR files
+            </p>
+          </div>
           <div className="justify-self-end flex gap-2">
             <SplitViewToggle />
             <FontSizeToggle />
