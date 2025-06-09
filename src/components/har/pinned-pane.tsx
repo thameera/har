@@ -122,7 +122,7 @@ export function PinnedPane({ view }: PinnedPaneProps) {
   if (pinnedRequests.length === 0) {
     return (
       <div className="h-full flex items-center justify-center">
-        <div className="text-muted-foreground text-center p-4">
+        <div className="text-muted-foreground text-center text-lg p-4">
           No pinned requests yet. Click the pin icon on a request to pin it.
         </div>
       </div>
