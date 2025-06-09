@@ -10,7 +10,7 @@ export function DetailsPane() {
         {selectedRequest ? (
           <RequestDetails request={selectedRequest} />
         ) : (
-          <div className="flex h-full items-center justify-center text-muted-foreground">
+          <div className="flex h-full items-center justify-center text-muted-foreground text-lg">
             Select a request to view details
           </div>
         )}

@@ -105,11 +105,15 @@ export function FileUploader() {
       >
         <input {...getInputProps()} />
         {isLoading ? (
-          <p className="text-muted-foreground">Parsing the HAR file...</p>
+          <p className="text-muted-foreground text-lg">
+            Parsing the HAR file...
+          </p>
         ) : isDragActive ? (
-          <p className="text-muted-foreground">Drop the file here ...</p>
+          <p className="text-muted-foreground text-lg">
+            Drop the file here ...
+          </p>
         ) : (
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground text-lg">
             Drag 'n' drop a HAR file here, or click to open file dialog
           </p>
         )}
