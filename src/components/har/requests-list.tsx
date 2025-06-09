@@ -38,7 +38,7 @@ const RequestItem = memo(
   }) => {
     return (
       <div
-        className={`flex items-center gap-2 p-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer rounded transition-colors duration-150 ${
+        className={`flex items-center gap-2 p-2 hover:bg-blue-100 dark:hover:bg-blue-900/20 hover:shadow-md hover:shadow-blue-100 dark:hover:shadow-blue-900/30 cursor-pointer rounded transition-all duration-200 ${
           isSelected ? "bg-blue-100 dark:bg-blue-900/30" : ""
         } border border-black dark:border-gray-600 mb-1 rounded-md`}
         onClick={onSelect}
