@@ -7,6 +7,11 @@ import { MethodFilter } from "./method-filter";
 import { TextFilter } from "./text-filter";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
 
 interface ToolbarProps {
   onViewChange?: (view: string) => void;
@@ -86,16 +91,22 @@ export function Toolbar({ onViewChange }: ToolbarProps) {
         />
 
         {hasActiveFilters && (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={clearAllFilters}
-            className="flex items-center gap-2 h-9"
-            title="Clear all filters"
-          >
-            <X className="h-4 w-4" />
-            Clear Filters
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={clearAllFilters}
+                className="flex items-center gap-2 h-9"
+              >
+                <X className="h-4 w-4" />
+                Clear Filters
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Clear all filters</p>
+            </TooltipContent>
+          </Tooltip>
         )}
       </div>
     </div>

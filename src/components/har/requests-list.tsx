@@ -2,6 +2,11 @@ import { useHar } from "./har-provider";
 import { PinIcon } from "lucide-react";
 import { memo, useMemo, useCallback } from "react";
 import { HarRequest } from "./harTypes";
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
 
 const formatRequestTime = (dateTimeString: string): string => {
   try {
@@ -79,17 +84,23 @@ const RequestItem = memo(
             <span>{formatTime(request.time)}ms</span>
           </div>
         </div>
-        <button
-          onClick={onTogglePin}
-          className={`p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors icon-button ${
-            isPinned
-              ? "text-blue-500 dark:text-blue-400"
-              : "text-gray-400 dark:text-gray-500"
-          }`}
-          title={isPinned ? "Unpin request" : "Pin request"}
-        >
-          <PinIcon className="h-4 w-4 icon-button" />
-        </button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              onClick={onTogglePin}
+              className={`p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors icon-button ${
+                isPinned
+                  ? "text-blue-500 dark:text-blue-400"
+                  : "text-gray-400 dark:text-gray-500"
+              }`}
+            >
+              <PinIcon className="h-4 w-4 icon-button" />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>{isPinned ? "Unpin request" : "Pin request"}</p>
+          </TooltipContent>
+        </Tooltip>
       </div>
     );
   },
