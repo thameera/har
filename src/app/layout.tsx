@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "HAR Analyzer",
+  title: "HAR Tool",
   description: "View and analyze HAR files",
 };
 

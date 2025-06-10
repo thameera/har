@@ -4,6 +4,7 @@ import HarContainer from "@/components/har/har-container";
 import { ModeToggle } from "@/components/mode-toggle";
 import { FontSizeToggle } from "@/components/font-size-toggle";
 import { SplitViewToggle } from "@/components/split-view-toggle";
+import { GitHubButton } from "@/components/github-button";
 
 export default function Home() {
   /*
@@ -23,6 +24,7 @@ export default function Home() {
           <div className="justify-self-end flex gap-2">
             <SplitViewToggle />
             <FontSizeToggle />
+            <GitHubButton />
             <ModeToggle />
           </div>
         </div>
