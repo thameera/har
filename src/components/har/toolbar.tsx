@@ -45,8 +45,8 @@ export function Toolbar({ onViewChange }: ToolbarProps) {
   }, [view, onViewChange]);
 
   return (
-    <div className="bg-muted/70 p-2 border-b border-border flex items-center justify-between">
-      <div className="flex items-center gap-4">
+    <div className="bg-muted/70 p-2 border-b border-border">
+      <div className="flex items-center gap-4 flex-wrap">
         <ToggleGroup
           type="single"
           value={view}
@@ -87,7 +87,7 @@ export function Toolbar({ onViewChange }: ToolbarProps) {
           onChange={setSearchText}
           isFullSearch={isFullSearch}
           onFullSearchToggle={setIsFullSearch}
-          className="min-w-[300px]"
+          className="min-w-[200px] flex-shrink"
         />
 
         {hasActiveFilters && (
