@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev --turbopack --port 8890",
     "build": "next build",
-    "start": "next start",
+    "start": "next start --port 8890",
     "lint": "next lint",
     "prepare": "husky",
     "format": "prettier --write ."
