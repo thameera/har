@@ -478,11 +478,24 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
     setIsFullSearch(false);
   };
 
+  const clearHarData = () => {
+    setHarData(null);
+    setSelectedRequest(null);
+    setPinnedRequests([]);
+    setAvailableDomains([]);
+    setSelectedDomains([]);
+    setAvailableMethods([]);
+    setSelectedMethods([]);
+    setSearchText("");
+    setIsFullSearch(false);
+  };
+
   return (
     <HarContext.Provider
       value={{
         harData,
         setHarFile,
+        clearHarData,
         getAllRequests,
         getFilteredRequests,
         selectedRequest,
