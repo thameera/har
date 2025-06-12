@@ -44,7 +44,6 @@ export function HoverCopyButton({
         width: size === "sm" ? "18px" : "24px",
         minHeight: "0",
         minWidth: "0",
-        transform: "translateY(2px)",
       }}
     >
       {copied ? (
