@@ -2,6 +2,7 @@ import { HarRequest } from "./harTypes";
 import { RequestDetailURL } from "./request-detail-url";
 import { RequestDetailStatus } from "./request-detail-status";
 import { RequestDetailServerIP } from "./request-detail-server-ip";
+import { RequestDetailTokens } from "./request-detail-tokens";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { RequestTab } from "./request-tab";
 import { ResponseTab } from "./response-tab";
@@ -12,8 +13,6 @@ interface RequestDetailsProps {
 }
 
 export function RequestDetails({ request }: RequestDetailsProps) {
-  const { status } = request.response;
-
   return (
     <div className="h-full overflow-auto">
       <div className="p-4 space-y-2">
@@ -21,8 +20,9 @@ export function RequestDetails({ request }: RequestDetailsProps) {
           {request.startedDateTime.replace("T", " ")}
         </div>
         <RequestDetailURL request={request} />
-        <RequestDetailStatus status={status} />
+        <RequestDetailStatus status={request.response.status} />
         <RequestDetailServerIP serverIPAddress={request.serverIPAddress} />
+        <RequestDetailTokens request={request} />
 
         <div className="mt-6">
           <Tabs defaultValue="request" className="w-full">
