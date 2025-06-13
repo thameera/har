@@ -1,5 +1,6 @@
 import { HarRequest } from "./harTypes";
 import { Badge } from "@/components/ui/badge";
+import { JwtDialog } from "./jwt-dialog";
 
 interface RequestDetailTokensProps {
   request: HarRequest;
@@ -18,13 +19,14 @@ export function RequestDetailTokens({ request }: RequestDetailTokensProps) {
     <div className="flex flex-wrap gap-2">
       Tokens detected:
       {jwtList.map((token, index) => (
-        <Badge
-          key={`jwt-${index}`}
-          variant="secondary"
-          className="bg-blue-500 text-white dark:bg-blue-600"
-        >
-          jwt: {token.name}
-        </Badge>
+        <JwtDialog key={`jwt-${index}`} token={token}>
+          <Badge
+            variant="secondary"
+            className="bg-blue-500 text-white dark:bg-blue-600 cursor-pointer hover:bg-blue-600 dark:hover:bg-blue-700"
+          >
+            jwt: {token.name}
+          </Badge>
+        </JwtDialog>
       ))}
       {samlList.map((token, index) => (
         <Badge key={`saml-${index}`} variant="secondary">
