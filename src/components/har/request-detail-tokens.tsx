@@ -15,6 +15,26 @@ export function RequestDetailTokens({ request }: RequestDetailTokensProps) {
     return null;
   }
 
+  const sendSamlToTool = (token: { name: string; value: string }) => {
+    // Create a form + input
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = "https://samltool.io/";
+    form.target = "_blank";
+
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = token.name;
+    input.value = token.value;
+
+    form.appendChild(input);
+    document.body.appendChild(form);
+
+    // Submit form + remove it
+    form.submit();
+    document.body.removeChild(form);
+  };
+
   return (
     <div className="flex flex-wrap gap-2">
       Tokens detected:
@@ -29,7 +49,12 @@ export function RequestDetailTokens({ request }: RequestDetailTokensProps) {
         </JwtDialog>
       ))}
       {samlList.map((token, index) => (
-        <Badge key={`saml-${index}`} variant="secondary">
+        <Badge
+          key={`saml-${index}`}
+          variant="secondary"
+          className="bg-green-500 text-white dark:bg-green-600 cursor-pointer hover:bg-green-600 dark:hover:bg-green-700"
+          onClick={() => sendSamlToTool(token)}
+        >
           saml: {token.name}
         </Badge>
       ))}
