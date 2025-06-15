@@ -14,6 +14,22 @@ interface JwtDialogProps {
 }
 
 export function JwtDialog({ token, children }: JwtDialogProps) {
+  const highlightJson = (jsonString: string) => {
+    return jsonString
+      .replace(/("(?:[^"\\]|\\.)*")\s*:/g, '<span class="json-key">$1</span>:') // Keys
+      .replace(
+        /:(\s*)("(?:[^"\\]|\\.)*")/g,
+        ': <span class="json-string">$2</span>',
+      ) // String values
+      .replace(/:(\s*)(true|false)/g, ': <span class="json-boolean">$2</span>') // Booleans
+      .replace(/:(\s*)(null)/g, ': <span class="json-null">$2</span>') // Null
+      .replace(
+        /:(\s*)(-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)/g,
+        ': <span class="json-number">$2</span>',
+      ) // Numbers
+      .replace(/([{}[\],])/g, '<span class="json-punctuation">$1</span>'); // Punctuation
+  };
+
   const decodeJwt = (tokenValue: string) => {
     try {
       const parts = tokenValue.split(".");
@@ -86,11 +102,11 @@ export function JwtDialog({ token, children }: JwtDialogProps) {
               <label className="text-sm font-medium">Header</label>
               <CopyButton text={decodedJwt.header} />
             </div>
-            <textarea
-              className="w-full p-2 border rounded-md bg-gray-50 dark:bg-gray-800 font-mono text-xs"
-              rows={6}
-              value={decodedJwt.header}
-              readOnly
+            <pre
+              className="w-full p-2 border rounded-md bg-gray-50 dark:bg-gray-800 font-mono text-xs overflow-auto json-highlight"
+              dangerouslySetInnerHTML={{
+                __html: highlightJson(decodedJwt.header),
+              }}
             />
           </div>
 
@@ -100,11 +116,11 @@ export function JwtDialog({ token, children }: JwtDialogProps) {
               <label className="text-sm font-medium">Payload</label>
               <CopyButton text={decodedJwt.payload} />
             </div>
-            <textarea
-              className="w-full p-2 border rounded-md bg-gray-50 dark:bg-gray-800 font-mono text-xs"
-              rows={10}
-              value={decodedJwt.payload}
-              readOnly
+            <pre
+              className="w-full p-2 border rounded-md bg-gray-50 dark:bg-gray-800 font-mono text-xs overflow-auto json-highlight"
+              dangerouslySetInnerHTML={{
+                __html: highlightJson(decodedJwt.payload),
+              }}
             />
           </div>
         </div>

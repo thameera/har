@@ -200,3 +200,56 @@
   height: 14px !important;
   width: 14px !important;
 }
+
+/* JSON Syntax Highlighting */
+.json-highlight .json-key {
+  color: #0066cc;
+  font-weight: 600;
+}
+
+.json-highlight .json-string {
+  color: #22c55e;
+}
+
+.json-highlight .json-number {
+  color: #f59e0b;
+}
+
+.json-highlight .json-boolean {
+  color: #8b5cf6;
+  font-weight: 600;
+}
+
+.json-highlight .json-null {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+.json-highlight .json-punctuation {
+  color: #6b7280;
+}
+
+/* Dark mode JSON highlighting */
+.dark .json-highlight .json-key {
+  color: #60a5fa;
+}
+
+.dark .json-highlight .json-string {
+  color: #4ade80;
+}
+
+.dark .json-highlight .json-number {
+  color: #fbbf24;
+}
+
+.dark .json-highlight .json-boolean {
+  color: #a78bfa;
+}
+
+.dark .json-highlight .json-null {
+  color: #f87171;
+}
+
+.dark .json-highlight .json-punctuation {
+  color: #9ca3af;
+}
