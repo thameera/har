@@ -6,6 +6,7 @@ import {
 } from "@/components/ui/accordion";
 import { HarRequest } from "./harTypes";
 import { HoverCopyButton } from "./hover-copy-button";
+import { highlightJson } from "@/lib/utils";
 
 interface ResponseTabProps {
   request: HarRequest;
@@ -35,14 +36,42 @@ export function ResponseTab({ request }: ResponseTabProps) {
     );
   };
 
-  // Prettify JSON content
-  const getPrettifiedContent = (content: {
-    mimeType: string;
-    text?: string;
-  }) => {
+  // Render content with appropriate highlighting
+  const renderContent = (content: { mimeType: string; text?: string }) => {
+    if (!content.text) return null;
+
+    const isJsonMimeType = content.mimeType.toLowerCase().includes("json");
+    const baseClassName =
+      "font-mono text-sm p-2 bg-gray-50 dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-800 overflow-x-auto whitespace-pre-wrap break-words max-h-96 overflow-y-auto pr-10";
+
+    if (isJsonMimeType) {
+      try {
+        const prettified = JSON.stringify(JSON.parse(content.text), null, 2);
+        return (
+          <pre
+            className={`${baseClassName} json-highlight`}
+            dangerouslySetInnerHTML={{
+              __html: highlightJson(prettified),
+            }}
+          />
+        );
+      } catch (_) {
+        const errorContent = `// Invalid JSON format\n${content.text}`;
+        return <pre className={baseClassName}>{errorContent}</pre>;
+      }
+    }
+
+    // Return plain text for non-JSON content
+    return <pre className={baseClassName}>{content.text}</pre>;
+  };
+
+  // Get content for copy button
+  const getContentForCopy = (content: { mimeType: string; text?: string }) => {
     if (!content.text) return "";
 
-    if (content.mimeType.toLowerCase().includes("json")) {
+    const isJsonMimeType = content.mimeType.toLowerCase().includes("json");
+
+    if (isJsonMimeType) {
       try {
         return JSON.stringify(JSON.parse(content.text), null, 2);
       } catch (_) {
@@ -50,7 +79,6 @@ export function ResponseTab({ request }: ResponseTabProps) {
       }
     }
 
-    // Return original content for non-JSON types
     return content.text;
   };
 
@@ -89,11 +117,9 @@ export function ResponseTab({ request }: ResponseTabProps) {
               </h4>
               {canDisplayAsText(response.content) ? (
                 <div className="group relative">
-                  <pre className="font-mono text-sm p-2 bg-gray-50 dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-800 overflow-x-auto whitespace-pre-wrap break-words max-h-96 overflow-y-auto pr-10">
-                    {getPrettifiedContent(response.content)}
-                  </pre>
+                  {renderContent(response.content)}
                   <HoverCopyButton
-                    value={getPrettifiedContent(response.content)}
+                    value={getContentForCopy(response.content)}
                     position="code-block"
                   />
                 </div>
