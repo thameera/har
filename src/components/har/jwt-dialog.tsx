@@ -62,11 +62,11 @@ export function JwtDialog({ token, children }: JwtDialogProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="max-w-4xl max-h-[80vh] overflow-auto">
+      <DialogContent className="!max-w-[40vw] max-h-[80vh] overflow-hidden">
         <DialogHeader>
-          <DialogTitle>JWT Token: {token.name}</DialogTitle>
+          <DialogTitle>JWT: {token.name}</DialogTitle>
         </DialogHeader>
-        <div className="space-y-4">
+        <div className="space-y-4 overflow-y-auto max-h-[calc(80vh-8rem)] pr-4">
           {/* Raw JWT */}
           <div>
             <div className="flex items-center justify-between mb-2">
@@ -74,7 +74,7 @@ export function JwtDialog({ token, children }: JwtDialogProps) {
               <CopyButton text={token.value} />
             </div>
             <textarea
-              className="w-full p-2 border rounded-md bg-gray-50 dark:bg-gray-800 font-mono text-xs resize-none overflow-y-auto"
+              className="w-full max-w-full p-2 border rounded-md bg-gray-50 dark:bg-gray-800 font-mono text-xs resize-none overflow-x-auto whitespace-nowrap"
               rows={3}
               value={token.value}
               readOnly
@@ -88,7 +88,7 @@ export function JwtDialog({ token, children }: JwtDialogProps) {
               <CopyButton text={decodedJwt.header} />
             </div>
             <pre
-              className="w-full p-2 border rounded-md bg-gray-50 dark:bg-gray-800 font-mono text-xs overflow-auto json-highlight"
+              className="w-full max-w-full p-2 border rounded-md bg-gray-50 dark:bg-gray-800 font-mono text-xs overflow-x-auto whitespace-pre json-highlight"
               dangerouslySetInnerHTML={{
                 __html: highlightJson(decodedJwt.header),
               }}
@@ -102,7 +102,7 @@ export function JwtDialog({ token, children }: JwtDialogProps) {
               <CopyButton text={decodedJwt.payload} />
             </div>
             <pre
-              className="w-full p-2 border rounded-md bg-gray-50 dark:bg-gray-800 font-mono text-xs overflow-auto json-highlight"
+              className="w-full max-w-full p-2 border rounded-md bg-gray-50 dark:bg-gray-800 font-mono text-xs overflow-x-auto whitespace-pre json-highlight"
               dangerouslySetInnerHTML={{
                 __html: highlightJson(decodedJwt.payload),
               }}
