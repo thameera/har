@@ -21,11 +21,34 @@ export function JwtDialog({ token, children }: JwtDialogProps) {
         return { header: "Invalid JWT format", payload: "Invalid JWT format" };
       }
 
-      const header = JSON.stringify(JSON.parse(atob(parts[0])), null, 2);
-      const payload = JSON.stringify(JSON.parse(atob(parts[1])), null, 2);
+      // Convert base64url to base64
+      const base64UrlToBase64 = (str: string) => {
+        return str.replace(/-/g, "+").replace(/_/g, "/");
+      };
+
+      // Add padding if needed
+      const addPadding = (str: string) => {
+        const pad = str.length % 4;
+        if (pad) {
+          return str + "=".repeat(4 - pad);
+        }
+        return str;
+      };
+
+      const header = JSON.stringify(
+        JSON.parse(atob(addPadding(base64UrlToBase64(parts[0])))),
+        null,
+        2,
+      );
+      const payload = JSON.stringify(
+        JSON.parse(atob(addPadding(base64UrlToBase64(parts[1])))),
+        null,
+        2,
+      );
 
       return { header, payload };
     } catch (error) {
+      console.error(error);
       return {
         header: "Failed to decode JWT header",
         payload: "Failed to decode JWT payload",
