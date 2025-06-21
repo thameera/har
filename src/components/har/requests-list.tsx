@@ -152,8 +152,8 @@ export const RequestsList = memo(({ view }: RequestsListProps) => {
 
   if (requests.length === 0) {
     return (
-      <div className="p-4 text-center text-gray-500">
-        No requests found. Please load a HAR file.
+      <div className="flex h-full items-center justify-center text-muted-foreground text-lg">
+        No requests match the selected filter.
       </div>
     );
   }
