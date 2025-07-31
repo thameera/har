@@ -57,7 +57,9 @@ const RequestItem = memo(
                       <span className="text-gray-600 dark:text-gray-400">
                         {url.protocol + "//"}
                       </span>
-                      <span className="font-medium text-blue-500 dark:text-blue-200">
+                      <span
+                        className={`font-medium ${request._custom.domainColor}`}
+                      >
                         {url.hostname}
                         {url.port ? `:${url.port}` : ""}
                       </span>

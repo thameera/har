@@ -48,6 +48,7 @@ export interface HarRequest {
     jwtList: Array<NameValueParam>;
     urlObj: URL | null;
     domain: string;
+    domainColor: string;
   };
 }
 

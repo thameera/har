@@ -13,6 +13,19 @@ import {
   NameValueParam,
 } from "./harTypes";
 
+// Colors for the domain color map
+const DOMAIN_COLORS = [
+  "text-red-500 dark:text-red-400",
+  "text-orange-500 dark:text-orange-400",
+  "text-green-500 dark:text-green-400",
+  "text-teal-500 dark:text-teal-400",
+  "text-cyan-500 dark:text-cyan-400",
+  "text-blue-500 dark:text-blue-400",
+  "text-indigo-500 dark:text-indigo-400",
+  "text-purple-500 dark:text-purple-400",
+  "text-pink-500 dark:text-pink-400",
+];
+
 const HarContext = createContext<HarContextType | undefined>(undefined);
 
 export function HarProvider({ children }: { children: React.ReactNode }) {
@@ -185,6 +198,7 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
         jwtList: [],
         urlObj: null,
         domain: "",
+        domainColor: "text-blue-500 dark:text-blue-200", // Default color
       };
 
       try {
@@ -289,11 +303,26 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
       }
     });
 
-    setHarData(data);
-
     // Extract and set available domains
     const domains = extractDomains(data.log.entries);
     setAvailableDomains(domains);
+
+    // Create a color map for domains for easier visual scanning
+    const domainColorMap: Record<string, string> = {};
+    domains.forEach((domain, index) => {
+      domainColorMap[domain] = DOMAIN_COLORS[index % DOMAIN_COLORS.length];
+    });
+
+    // Second pass to assign the calculated color
+    data.log.entries.forEach((request) => {
+      if (request._custom?.domain) {
+        const color = domainColorMap[request._custom.domain];
+        if (color) {
+          request._custom.domainColor = color;
+        }
+      }
+    });
+    setHarData(data);
 
     // Extract and set available methods
     const methods = extractMethods(data.log.entries);
