@@ -30,6 +30,15 @@ export default function Home() {
             <ModeToggle />
           </div>
         </div>
+        <div
+          className="md:hidden rounded-lg border border-yellow-300 bg-yellow-50 text-yellow-900 p-3 text-sm"
+          role="alert"
+          aria-live="polite"
+        >
+          <strong className="font-medium">Heads up:</strong> HAR Tool is
+          optimized for desktop browsers. Some features may not work well on
+          mobile.
+        </div>
         <HarContainer />
       </div>
     </div>
