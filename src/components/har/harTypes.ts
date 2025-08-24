@@ -74,7 +74,8 @@ export interface HarData {
 
 export interface HarContextType {
   harData: HarData | null;
-  setHarFile: (data: HarData) => void;
+  harFileName: string | null;
+  setHarFile: (data: HarData, fileName?: string) => void;
   clearHarData: () => void;
   getAllRequests: () => HarRequest[];
   getFilteredRequests: (viewMode: string) => HarRequest[];

@@ -125,6 +125,7 @@ export const RequestsList = memo(({ view }: RequestsListProps) => {
     selectRequest,
     togglePin,
     isPinned,
+    harFileName,
   } = useHar();
 
   // Memoize the filtered requests
@@ -152,44 +153,50 @@ export const RequestsList = memo(({ view }: RequestsListProps) => {
     [selectRequest],
   );
 
-  if (requests.length === 0) {
-    return (
-      <div className="flex h-full items-center justify-center text-muted-foreground text-lg">
-        No requests match the selected filter.
-      </div>
-    );
-  }
-
   return (
-    <div className="h-full overflow-hidden">
-      <div className="h-full overflow-y-auto">
-        <div className="p-2">
-          {requests.map((request) => {
-            // Create stable callback references for each item
-            const requestId = request._custom?.id;
-            const handleSelect = createSelectHandler(request);
-            const handleTogglePin =
-              requestId !== undefined
-                ? createTogglePinHandler(requestId)
-                : (e: React.MouseEvent) => {
-                    e.stopPropagation();
-                  };
-            const isItemSelected = selectedRequest === request;
-            const isItemPinned = isPinned(request);
-
-            return (
-              <RequestItem
-                key={requestId || Math.random()}
-                request={request}
-                isSelected={isItemSelected}
-                onSelect={handleSelect}
-                onTogglePin={handleTogglePin}
-                isPinned={isItemPinned}
-              />
-            );
-          })}
+    <div className="h-full overflow-hidden flex flex-col">
+      {/* Sticky HAR filename header */}
+      {harFileName && (
+        <div className="sticky top-0 z-10 bg-background/80 backdrop-blur border-b border-border px-4 py-2 flex items-center">
+          <span className="text-sm text-muted-foreground max-w-[280px] md:max-w-[360px] truncate">
+            {harFileName}
+          </span>
         </div>
-      </div>
+      )}
+      {requests.length === 0 ? (
+        <div className="flex h-full items-center justify-center text-muted-foreground text-lg">
+          No requests match the selected filter.
+        </div>
+      ) : (
+        <div className="h-full overflow-y-auto">
+          <div className="p-2">
+            {requests.map((request) => {
+              // Create stable callback references for each item
+              const requestId = request._custom?.id;
+              const handleSelect = createSelectHandler(request);
+              const handleTogglePin =
+                requestId !== undefined
+                  ? createTogglePinHandler(requestId)
+                  : (e: React.MouseEvent) => {
+                      e.stopPropagation();
+                    };
+              const isItemSelected = selectedRequest === request;
+              const isItemPinned = isPinned(request);
+
+              return (
+                <RequestItem
+                  key={requestId || Math.random()}
+                  request={request}
+                  isSelected={isItemSelected}
+                  onSelect={handleSelect}
+                  onTogglePin={handleTogglePin}
+                  isPinned={isItemPinned}
+                />
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 });

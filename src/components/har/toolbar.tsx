@@ -29,6 +29,7 @@ export function Toolbar({ onViewChange }: ToolbarProps) {
     selectedMethods,
     clearAllFilters,
     clearHarData,
+    harFileName,
   } = useHar();
   const hasPinnedRequests = pinnedRequests.length > 0;
 

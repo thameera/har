@@ -5,6 +5,7 @@ import { useHar } from "./har-provider";
 export function FileUploader() {
   const workerRef = useRef<Worker | null>(null);
   const { setHarFile } = useHar();
+  const fileNameRef = useRef<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -35,7 +36,7 @@ export function FileUploader() {
       setIsLoading(false);
       if (success) {
         console.log("Successfully parsed HAR file");
-        setHarFile(data);
+        setHarFile(data, fileNameRef.current ?? undefined);
         setError(null);
       } else {
         console.log(error);
@@ -62,6 +63,7 @@ export function FileUploader() {
     setIsLoading(true);
     setError(null);
     const file = acceptedFiles[0];
+    fileNameRef.current = file.name;
 
     const reader = new FileReader();
 

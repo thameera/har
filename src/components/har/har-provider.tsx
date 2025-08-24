@@ -30,6 +30,7 @@ const HarContext = createContext<HarContextType | undefined>(undefined);
 
 export function HarProvider({ children }: { children: React.ReactNode }) {
   const [harData, setHarData] = useState<HarData | null>(null);
+  const [harFileName, setHarFileName] = useState<string | null>(null);
   const [selectedRequest, setSelectedRequest] = useState<HarRequest | null>(
     null,
   );
@@ -166,7 +167,7 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
     return Array.from(methods).sort();
   };
 
-  const setHarFile = (data: HarData) => {
+  const setHarFile = (data: HarData, fileName?: string) => {
     console.log("setting har file");
     const SAML_KEYS = new Set(["SAMLResponse", "SAMLRequest"]);
     const JWT_KEYS = new Set(["access_token", "id_token"]);
@@ -323,6 +324,7 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
       }
     });
     setHarData(data);
+    setHarFileName(fileName ?? null);
 
     // Extract and set available methods
     const methods = extractMethods(data.log.entries);
@@ -509,6 +511,7 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
 
   const clearHarData = () => {
     setHarData(null);
+    setHarFileName(null);
     setSelectedRequest(null);
     setPinnedRequests([]);
     setAvailableDomains([]);
@@ -523,6 +526,7 @@ export function HarProvider({ children }: { children: React.ReactNode }) {
     <HarContext.Provider
       value={{
         harData,
+        harFileName,
         setHarFile,
         clearHarData,
         getAllRequests,
