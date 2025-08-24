@@ -1,5 +1,5 @@
 import { useHar } from "./har-provider";
-import { PinIcon } from "lucide-react";
+import { PinIcon, FileIcon } from "lucide-react";
 import { memo, useMemo, useCallback } from "react";
 import { HarRequest } from "./harTypes";
 import {
@@ -157,8 +157,9 @@ export const RequestsList = memo(({ view }: RequestsListProps) => {
     <div className="h-full overflow-hidden flex flex-col">
       {/* Sticky HAR filename header */}
       {harFileName && (
-        <div className="sticky top-0 z-10 bg-background/80 backdrop-blur border-b border-border px-4 py-2 flex items-center">
-          <span className="text-sm text-muted-foreground max-w-[280px] md:max-w-[360px] truncate">
+        <div className="sticky top-0 z-10 backdrop-blur border-b border-border px-4 pb-1 flex items-center">
+          <FileIcon className="h-5 w-5 text-blue-700 dark:text-yellow-300 mr-2" />
+          <span className="text-sm font-semibold text-blue-500 dark:text-yellow-300 max-w-[280px] md:max-w-[360px] truncate">
             {harFileName}
           </span>
         </div>

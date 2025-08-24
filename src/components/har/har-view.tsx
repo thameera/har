@@ -20,7 +20,7 @@ function PanelsContainer({ view }: PanelsContainerProps) {
         defaultSize={40}
         minSize={20}
         maxSize={80}
-        className="bg-muted/50 p-4"
+        className="bg-muted/50 p-4 pt-2"
       >
         <RequestsList view={view} />
       </Panel>
